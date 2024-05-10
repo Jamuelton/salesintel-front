@@ -11,11 +11,21 @@ export const Container = styled.div`
   width: 100%;
 `;
 
-export const InputArea = styled(Input)<{ $color?: string }>`
-  background: var(--blue-primary);
+export const InputArea = styled(Input)<{
+  $color?: string;
+  $secondColor?: string;
+}>`
+  background: ${(props) => props.$secondColor};
   border: ${(props) => props.$color} 1px solid;
+  color: ${(props) => props.$color};
 
-  &::placeholder {
-    color: ${(props) => props.$color};
+  .ant-input {
+    &::placeholder {
+      color: ${(props) => props.$color} !important;
+    }
+  }
+  &:hover {
+    background: ${(props) => props.$secondColor} !important;
+    border: ${(props) => props.$color} 1px solid;
   }
 `;
