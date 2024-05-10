@@ -11,4 +11,19 @@ export const Container = styled.div`
   background-size: cover;
 `;
 
-export const FormArea = styled.section``;
+export const FormArea = styled.section`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+
+  div {
+    padding: 0.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+`;
