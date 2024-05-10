@@ -1,3 +1,10 @@
 * {
   margin: 0;
 }
+
+:root {
+  --white-primary: #f5f6fa;
+  --white-secondary: #dcdde1;
+  --blue-primary: #244bc5;
+  --blue-secundary: #274fc7;
+}
