@@ -37,8 +37,10 @@ export const Line = styled(Divider)`
 
 export const Link = styled.p`
   color: var(--white-primary);
-
-  a {
-    color: var(--white-primary);
+  display: flex;
+  gap: 8px;
+  p {
+    text-decoration: underline;
+    cursor: pointer;
   }
 `;

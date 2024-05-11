@@ -3,8 +3,14 @@ import { Input } from "../../components/Input";
 import * as S from "./styles";
 import { Button } from "../../components/Button";
 import Logo from "../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export function Login() {
+  const navigate = useNavigate();
+
+  const sendSign = () => {
+    navigate("/signup");
+  };
   return (
     <S.Container>
       <S.FormArea>
@@ -36,11 +42,11 @@ export function Login() {
           />
         </div>
 
-        <S.Line style={{ borderBottom: "1px solid #f5f6fa" }} />
+        <S.Line style={{ borderTop: "1px solid #f5f6fa" }} />
 
         <div>
           <S.Link>
-            Não é cadastrado? | <a href="/signup">Cadastrar</a>
+            Não é cadastrado? | <p onClick={sendSign}>Cadastrar</p>
           </S.Link>
         </div>
       </S.FormArea>

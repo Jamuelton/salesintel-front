@@ -1,9 +1,16 @@
-import { User, Lock, At } from "@phosphor-icons/react";
+import { User, Lock, At, ArrowCircleLeft } from "@phosphor-icons/react";
 import { Input } from "../../components/Input";
 import * as S from "./styles";
 import { Button } from "../../components/Button";
+import { useNavigate } from "react-router-dom";
 
 export function SignUp() {
+  const navigate = useNavigate();
+
+  const backLogin = () => {
+    navigate("/login");
+  };
+
   return (
     <S.Container>
       <S.FormArea>
@@ -43,12 +50,15 @@ export function SignUp() {
           />
         </div>
 
-        <S.Line style={{ borderBottom: "1px solid #f5f6fa" }} />
+        <S.Line style={{ borderTop: "1px solid #244bc5" }} />
 
         <div>
-          <S.Link>
-            Não é cadastrado? | <a href="/">Cadastrar</a>
-          </S.Link>
+          <ArrowCircleLeft
+            size={36}
+            weight="fill"
+            color="#244bc5"
+            onClick={backLogin}
+          />
         </div>
       </S.FormArea>
     </S.Container>

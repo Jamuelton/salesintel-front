@@ -26,6 +26,15 @@ export const FormArea = styled.section`
     justify-content: center;
     flex-direction: column;
     align-items: center;
+
+    h2 {
+      color: var(--blue-primary);
+      font-size: 2rem;
+    }
+
+    svg {
+      cursor: pointer;
+    }
   }
 `;
 
