@@ -2,12 +2,15 @@ import { User, Lock } from "@phosphor-icons/react";
 import { Input } from "../../components/Input";
 import * as S from "./styles";
 import { Button } from "../../components/Button";
+import Logo from "../../assets/logo.png";
 
 export function Login() {
   return (
     <S.Container>
       <S.FormArea>
-        <div>logo</div>
+        <div>
+          <img src={Logo} alt="logo" />
+        </div>
         <div>
           <Input
             placeholder={"Email"}
@@ -32,8 +35,14 @@ export function Login() {
             shape="round"
           />
         </div>
-        <div>linha</div>
-        <div>link</div>
+
+        <S.Line style={{ borderBottom: "1px solid #f5f6fa" }} />
+
+        <div>
+          <S.Link>
+            Não é cadastrado? | <a href="/signup">Cadastrar</a>
+          </S.Link>
+        </div>
       </S.FormArea>
     </S.Container>
   );

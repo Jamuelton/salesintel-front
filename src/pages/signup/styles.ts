@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import backgroundBlue from "../../assets/Background Login.png";
+import backgroundWhite from "../../assets/BackgroundSign.png";
 import { Divider } from "antd";
 
 export const Container = styled.div`
@@ -8,7 +8,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(${backgroundBlue});
+  background-image: url(${backgroundWhite});
   background-size: cover;
 `;
 
