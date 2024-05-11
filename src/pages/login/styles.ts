@@ -39,7 +39,7 @@ export const Link = styled.p`
   color: var(--white-primary);
   display: flex;
   gap: 8px;
-  p {
+  label {
     text-decoration: underline;
     cursor: pointer;
   }

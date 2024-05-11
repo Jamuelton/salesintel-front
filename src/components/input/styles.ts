@@ -18,13 +18,14 @@ export const InputArea = styled(Input)<{
   border: ${(props) => props.$color} 1px solid;
   color: ${(props) => props.$color};
 
+  &:hover {
+    background: ${(props) => props.$secondColor} !important;
+    border: ${(props) => props.$color} 1px solid;
+  }
+
   .ant-input {
     &::placeholder {
       color: ${(props) => props.$color} !important;
     }
-  }
-  &:hover {
-    background: ${(props) => props.$secondColor} !important;
-    border: ${(props) => props.$color} 1px solid;
   }
 `;
