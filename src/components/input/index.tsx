@@ -12,6 +12,7 @@ interface InputProps {
   disabled?: boolean;
   inputFunction?: React.ChangeEventHandler<HTMLInputElement>;
   status?: "" | "warning" | "error" | undefined;
+  errorText?: string;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -24,6 +25,7 @@ export const Input: React.FC<InputProps> = ({
   disabled,
   inputFunction,
   status,
+  errorText,
 }) => {
   return (
     <S.Container>
@@ -38,6 +40,7 @@ export const Input: React.FC<InputProps> = ({
         onChange={inputFunction}
         status={status}
       />
+      {status == "error" && <p>{errorText}*</p>}
     </S.Container>
   );
 };

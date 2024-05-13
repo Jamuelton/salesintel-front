@@ -33,9 +33,14 @@ export function Login() {
     navigate("/signup");
   };
 
+  const sendHome = () => {
+    navigate("/home");
+  };
+
   const login = () => {
     console.log("Email: " + email);
     console.log("Senha: " + passWord);
+    sendHome();
   };
   return (
     <S.Container>
