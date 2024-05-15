@@ -8,6 +8,11 @@ export const Container = styled.div`
   align-items: flex-start;
   gap: 12px;
   width: 100%;
+
+  p {
+    color: red;
+    font-size: 0.75rem;
+  }
 `;
 
 export const InputArea = styled(Input)<{

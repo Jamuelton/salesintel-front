@@ -17,7 +17,7 @@ export const FormArea = styled.section`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 20%;
+  width: 80%;
 
   div {
     padding: 0.5rem;
@@ -27,14 +27,27 @@ export const FormArea = styled.section`
     flex-direction: column;
     align-items: center;
 
-    h2 {
-      color: var(--blue-primary);
-      font-size: 2rem;
+    label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      h2 {
+        color: var(--blue-primary);
+        font-size: 2rem;
+      }
     }
 
     svg {
       cursor: pointer;
     }
+  }
+
+  @media (min-width: 426px) and (max-width: 768px) {
+    width: 50%;
+  }
+  @media (min-width: 1024px) {
+    width: 30%;
   }
 `;
 
