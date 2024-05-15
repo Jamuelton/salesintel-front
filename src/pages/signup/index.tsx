@@ -1,4 +1,10 @@
-import { User, Lock, At, ArrowCircleLeft } from "@phosphor-icons/react";
+import {
+  User,
+  Lock,
+  At,
+  ArrowCircleLeft,
+  ShoppingCart,
+} from "@phosphor-icons/react";
 import { Input } from "../../components/Input";
 import * as S from "./styles";
 import { Button } from "../../components/Button";
@@ -70,7 +76,10 @@ export function SignUp() {
     <S.Container>
       <S.FormArea>
         <div>
-          <h2>Sales Intel</h2>
+          <label htmlFor="">
+            <h2>Sales Intel </h2>
+            <ShoppingCart size={32} weight="fill" color="#244bc5" />
+          </label>
         </div>
         <div>
           <Input

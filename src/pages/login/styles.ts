@@ -17,7 +17,7 @@ export const FormArea = styled.section`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  width: 20%;
+  width: 80%;
 
   div {
     padding: 0.5rem;
@@ -26,6 +26,13 @@ export const FormArea = styled.section`
     justify-content: center;
     flex-direction: column;
     align-items: center;
+  }
+
+  @media (min-width: 426px) and (max-width: 768px) {
+    width: 50%;
+  }
+  @media (min-width: 1024px) {
+    width: 30%;
   }
 `;
 
