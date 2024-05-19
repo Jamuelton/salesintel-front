@@ -10,6 +10,15 @@ export const Container = styled.div`
   width: 100dvw;
   height: 100dvh;
   padding: 1rem;
+
+  h2 {
+    color: var(--blue-primary);
+
+    span {
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
 `;
 
 export const Content = styled.section`
@@ -57,6 +66,7 @@ export const StyledTable = styled(Table)`
     background: #dcdde1;
     border-bottom: 1px solid #b6b6b6;
     height: 17px;
+    padding: 8px 10px 8px 17px;
     line-height: 17px;
     font-size: 16px;
   }

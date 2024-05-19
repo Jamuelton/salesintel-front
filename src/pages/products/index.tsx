@@ -1,4 +1,4 @@
-import { MagnifyingGlass } from "@phosphor-icons/react";
+import { MagnifyingGlass, PlusCircle, XCircle } from "@phosphor-icons/react";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import * as S from "./styles";
@@ -30,9 +30,45 @@ const columns: ColumnsType<TableData> = [
     dataIndex: "expirationDate",
   },
   {
-    title: "#",
+    align: "center",
+    render: (record) => (
+      <>
+        <PlusCircle
+          size={24}
+          weight="bold"
+          color="#244BC5"
+          onClick={() => addItems(record.id)}
+          cursor={"pointer"}
+        />
+        <XCircle
+          size={24}
+          weight="bold"
+          color="#C52D24"
+          onClick={() => deleteItem(record.id)}
+          cursor={"pointer"}
+        />
+      </>
+    ),
   },
 ];
+
+const addItems = (id: number) => {
+  console.log("Adicionar item no: ", id);
+};
+
+const deleteItem = (id: number) => {
+  console.log("Deletar item: ", id);
+};
+
+const addProduct = () => {
+  console.log("Adicionar produto");
+};
+
+const handleChangeSearch = (e: { target: { value: string } }) => {
+  const { value } = e.target;
+
+  console.log(value);
+};
 
 const data: TableData[] = [
   {
@@ -120,7 +156,9 @@ export function Products() {
       <div>Navbar</div>
       <S.Content>
         <div>
-          <h2>NOME DA EMPRESA {"> "} PRODUTOS</h2>
+          <h2>
+            NOME DA EMPRESA {"> "} <span>PRODUTOS</span>
+          </h2>
           <S.Line style={{ borderTop: "1px solid #244bc5" }} />
         </div>
         <S.TableContainer>
@@ -130,6 +168,7 @@ export function Products() {
                 placeholder={"BUSCAR..."}
                 color="#244bc5"
                 leftIcon={<MagnifyingGlass size={18} weight="light" />}
+                inputFunction={handleChangeSearch}
               />
             </S.SearchInput>
 
@@ -139,6 +178,7 @@ export function Products() {
                 shape="round"
                 color="#f5f6fa"
                 secondColor="#244bc5"
+                buttonFunction={() => addProduct()}
               />
             </S.AddButton>
           </S.SearchButtonContainer>
