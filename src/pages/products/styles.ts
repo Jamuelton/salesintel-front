@@ -18,6 +18,11 @@ export const Container = styled.div`
       font-size: 20px;
       font-weight: bold;
     }
+
+    a {
+      text-decoration: none;
+      cursor: pointer;
+    }
   }
 `;
 

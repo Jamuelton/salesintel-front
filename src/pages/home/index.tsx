@@ -8,8 +8,11 @@ import {
 import { Button } from "../../components/Button";
 import * as S from "./styles";
 import { ProductList } from "../../components/productList";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
+  const navigate = useNavigate();
+
   const PRODUCT_DATA_TEST = [
     {
       name: "transmissao",
@@ -65,6 +68,10 @@ export function Home() {
 
   const itemsToShow = PRODUCT_DATA_TEST.slice(0, 7);
 
+  const sendToProducts = () => {
+    navigate("/products");
+  };
+
   return (
     <S.Container>
       <div>navbar</div>
@@ -77,7 +84,12 @@ export function Home() {
           <S.ProductArea>
             <S.ProductAreaTitle>
               <h3>Produtos</h3>
-              <ArrowCircleRight size={32} weight="fill" color="#244bc5" />
+              <ArrowCircleRight
+                size={32}
+                weight="fill"
+                color="#244bc5"
+                onClick={() => sendToProducts()}
+              />
             </S.ProductAreaTitle>
             <S.ProductAreaList>
               {itemsToShow.map((item, index) => (
