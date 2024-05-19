@@ -5,6 +5,7 @@ import * as S from "./styles";
 import type { ColumnsType } from "antd/es/table";
 
 interface TableData {
+  key: string;
   id: string;
   name: string;
   category: string;
@@ -16,18 +17,22 @@ const columns: ColumnsType<TableData> = [
   {
     title: "ID",
     dataIndex: "id",
+    key: "id",
   },
   {
     title: "PRODUTO",
     dataIndex: "name",
+    key: "name",
   },
   {
     title: "QNTD. TOTAL",
     dataIndex: "quantity",
+    key: "quantity",
   },
   {
     title: "VENCIMENTO",
     dataIndex: "expirationDate",
+    key: "expirationDate",
   },
   {
     align: "center",
@@ -72,6 +77,7 @@ const handleChangeSearch = (e: { target: { value: string } }) => {
 
 const data: TableData[] = [
   {
+    key: "1",
     id: "1",
     name: "Arroz Jurandir",
     category: "Alimentos",
@@ -79,6 +85,7 @@ const data: TableData[] = [
     expirationDate: "10/07/2024",
   },
   {
+    key: "2",
     id: "2",
     name: "Feijão Carioca",
     category: "Alimentos",
@@ -86,6 +93,7 @@ const data: TableData[] = [
     expirationDate: "15/08/2024",
   },
   {
+    key: "3",
     id: "3",
     name: "Macarrão Parafuso",
     category: "Alimentos",
@@ -93,6 +101,7 @@ const data: TableData[] = [
     expirationDate: "20/09/2024",
   },
   {
+    key: "4",
     id: "4",
     name: "Óleo de Soja",
     category: "Alimentos",
@@ -100,6 +109,7 @@ const data: TableData[] = [
     expirationDate: "01/12/2024",
   },
   {
+    key: "5",
     id: "5",
     name: "Açúcar Refinado",
     category: "Alimentos",
@@ -107,6 +117,7 @@ const data: TableData[] = [
     expirationDate: "30/11/2024",
   },
   {
+    key: "6",
     id: "6",
     name: "Café em Pó",
     category: "Alimentos",
@@ -114,6 +125,7 @@ const data: TableData[] = [
     expirationDate: "05/06/2024",
   },
   {
+    key: "7",
     id: "7",
     name: "Farinha de Trigo",
     category: "Alimentos",
@@ -121,6 +133,7 @@ const data: TableData[] = [
     expirationDate: "10/10/2024",
   },
   {
+    key: "8",
     id: "8",
     name: "Leite Condensado",
     category: "Alimentos",
@@ -128,6 +141,7 @@ const data: TableData[] = [
     expirationDate: "25/12/2024",
   },
   {
+    key: "9",
     id: "9",
     name: "Margarina",
     category: "Alimentos",
@@ -135,6 +149,7 @@ const data: TableData[] = [
     expirationDate: "05/05/2024",
   },
   {
+    key: "10",
     id: "10",
     name: "Molho de Tomate",
     category: "Alimentos",
@@ -142,6 +157,7 @@ const data: TableData[] = [
     expirationDate: "15/03/2024",
   },
   {
+    key: "11",
     id: "11",
     name: "Biscoito de Água e Sal",
     category: "Alimentos",
