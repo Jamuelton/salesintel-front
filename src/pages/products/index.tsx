@@ -120,30 +120,35 @@ export function Products() {
       <div>Navbar</div>
       <S.Content>
         <div>
-          <h2>Nome da Empresa {"> "} Produtos</h2>
+          <h2>NOME DA EMPRESA {"> "} PRODUTOS</h2>
           <S.Line style={{ borderTop: "1px solid #244bc5" }} />
         </div>
-        <div>
-          <div>
-            <Input
-              placeholder={"BUSCAR..."}
-              color="#244bc5"
-              leftIcon={<MagnifyingGlass size={18} weight="light" />}
-            />
-            <Button
-              label="ADICIONAR PRODUTO"
-              shape="round"
-              color="#f5f6fa"
-              secondColor="#244bc5"
-            />
-          </div>
+        <S.TableContainer>
+          <S.SearchButtonContainer>
+            <S.SearchInput>
+              <Input
+                placeholder={"BUSCAR..."}
+                color="#244bc5"
+                leftIcon={<MagnifyingGlass size={18} weight="light" />}
+              />
+            </S.SearchInput>
+
+            <S.AddButton>
+              <Button
+                label="ADICIONAR PRODUTO"
+                shape="round"
+                color="#f5f6fa"
+                secondColor="#244bc5"
+              />
+            </S.AddButton>
+          </S.SearchButtonContainer>
           <S.StyledTable
             columns={columns}
             bordered
             dataSource={data}
             pagination={{ pageSize: 9 }}
           />
-        </div>
+        </S.TableContainer>
       </S.Content>
     </S.Container>
   );

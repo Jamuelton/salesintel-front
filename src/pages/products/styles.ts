@@ -24,21 +24,41 @@ export const Line = styled(Divider)`
   }
 `;
 
+export const SearchButtonContainer = styled.section`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const AddButton = styled.div`
+  width: 15rem;
+`;
+export const SearchInput = styled.div`
+  width: 15rem;
+`;
+
+export const TableContainer = styled.section`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
 export const StyledTable = styled(Table)`
   .ant-table-thead > tr > th {
     border-bottom: 3px solid #244bc5;
-    background: #d9d9d9;
+    background: #dcdde1;
     color: #244bc5;
     border-right: none !important;
-    height: 20px;
-    line-height: 20px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 16px;
   }
   .ant-table-tbody > tr > td {
     border-right: none !important;
-    background: #d9d9d9;
+    background: #dcdde1;
     border-bottom: 1px solid #b6b6b6;
     height: 17px;
     line-height: 17px;
+    font-size: 16px;
   }
   .ant-table-container {
     border-radius: 12px;
