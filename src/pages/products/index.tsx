@@ -1,5 +1,7 @@
+import { MagnifyingGlass } from "@phosphor-icons/react";
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 import * as S from "./styles";
-import { Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 
 interface TableData {
@@ -12,12 +14,12 @@ interface TableData {
 
 const columns: ColumnsType<TableData> = [
   {
-    title: "Id",
+    title: "ID",
     dataIndex: "id",
   },
   {
-    title: "Produto",
-    dataIndex: "product",
+    title: "PRODUTO",
+    dataIndex: "name",
   },
   {
     title: "QNTD. TOTAL",
@@ -28,7 +30,87 @@ const columns: ColumnsType<TableData> = [
     dataIndex: "expirationDate",
   },
   {
-    title: " ",
+    title: "#",
+  },
+];
+
+const data: TableData[] = [
+  {
+    id: "1",
+    name: "Arroz Jurandir",
+    category: "Alimentos",
+    quantity: "350(UN)",
+    expirationDate: "10/07/2024",
+  },
+  {
+    id: "2",
+    name: "Feijão Carioca",
+    category: "Alimentos",
+    quantity: "200(UN)",
+    expirationDate: "15/08/2024",
+  },
+  {
+    id: "3",
+    name: "Macarrão Parafuso",
+    category: "Alimentos",
+    quantity: "150(UN)",
+    expirationDate: "20/09/2024",
+  },
+  {
+    id: "4",
+    name: "Óleo de Soja",
+    category: "Alimentos",
+    quantity: "100(UN)",
+    expirationDate: "01/12/2024",
+  },
+  {
+    id: "5",
+    name: "Açúcar Refinado",
+    category: "Alimentos",
+    quantity: "250(UN)",
+    expirationDate: "30/11/2024",
+  },
+  {
+    id: "6",
+    name: "Café em Pó",
+    category: "Alimentos",
+    quantity: "300(UN)",
+    expirationDate: "05/06/2024",
+  },
+  {
+    id: "7",
+    name: "Farinha de Trigo",
+    category: "Alimentos",
+    quantity: "180(UN)",
+    expirationDate: "10/10/2024",
+  },
+  {
+    id: "8",
+    name: "Leite Condensado",
+    category: "Alimentos",
+    quantity: "120(UN)",
+    expirationDate: "25/12/2024",
+  },
+  {
+    id: "9",
+    name: "Margarina",
+    category: "Alimentos",
+    quantity: "90(UN)",
+    expirationDate: "05/05/2024",
+  },
+  {
+    id: "10",
+    name: "Molho de Tomate",
+    category: "Alimentos",
+    quantity: "170(UN)",
+    expirationDate: "15/03/2024",
+  },
+  {
+    id: "11",
+    name: "Biscoito de Água e Sal",
+    category: "Alimentos",
+    quantity: "220(UN)",
+    expirationDate: "25/04/2024",
   },
 ];
 
@@ -43,10 +125,24 @@ export function Products() {
         </div>
         <div>
           <div>
-            <input type="text" />
-            <button>ADICIONAR PRODUTO</button>
+            <Input
+              placeholder={"BUSCAR..."}
+              color="#244bc5"
+              leftIcon={<MagnifyingGlass size={18} weight="light" />}
+            />
+            <Button
+              label="ADICIONAR PRODUTO"
+              shape="round"
+              color="#f5f6fa"
+              secondColor="#244bc5"
+            />
           </div>
-          <Table columns={columns} bordered />
+          <S.StyledTable
+            columns={columns}
+            bordered
+            dataSource={data}
+            pagination={{ pageSize: 9 }}
+          />
         </div>
       </S.Content>
     </S.Container>
