@@ -67,7 +67,7 @@ export function Home() {
 
   return (
     <S.Container>
-      <div>navbar</div>
+      <S.NavbarArea>navbar</S.NavbarArea>
       <S.Content>
         <div>
           <h2>Nome da Empresa</h2>
