@@ -256,7 +256,7 @@ export function Products() {
             </S.InputContainer>
             <S.InputContainer>
               <span>UNIDADE:</span>
-              <Select
+              <S.CustomSelect
                 placeholder="UNIDADE"
                 options={[
                   {
@@ -277,7 +277,7 @@ export function Products() {
           </S.Row>
           <S.InputContainer>
             <span>CATEGORIA:</span>
-            <Select
+            <S.CustomSelect
               placeholder="CATEGORIA"
               showSearch
               options={[

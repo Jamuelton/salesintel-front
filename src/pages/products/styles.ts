@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Divider, Modal } from "antd";
+import { Divider, Modal, Select } from "antd";
 import { Table } from "antd";
 
 export const Container = styled.div`
@@ -72,6 +72,12 @@ export const InputContainer = styled.div`
 
   display: flex;
   flex-direction: column;
+`;
+
+export const CustomSelect = styled(Select)`
+  .ant-select-selector {
+    border-color: var(--blue-primary) !important;
+  }
 `;
 
 export const SearchButtonContainer = styled.section`
