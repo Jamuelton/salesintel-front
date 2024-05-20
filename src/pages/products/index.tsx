@@ -4,7 +4,6 @@ import { Input } from "../../components/Input";
 import * as S from "./styles";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
-import { Select } from "antd";
 import { useState } from "react";
 
 interface TableData {
@@ -19,6 +18,8 @@ interface TableData {
 export function Products() {
   const navigate = useNavigate();
   const [isAddProducModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const columns: ColumnsType<TableData> = [
     {
@@ -70,11 +71,13 @@ export function Products() {
   ];
 
   const addItems = (id: number) => {
-    console.log("Adicionar item no: ", id);
+    console.log(id);
+    setIsAddItemsModalOpen(true);
   };
 
   const deleteItem = (id: number) => {
     console.log("Deletar item: ", id);
+    setIsDeleteModalOpen(true);
   };
 
   const addProductModal = () => {
@@ -89,6 +92,14 @@ export function Products() {
 
   const closeAddProductModal = () => {
     setIsAddProductModalOpen(false);
+  };
+
+  const closeAddItemsModal = () => {
+    setIsAddItemsModalOpen(false);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const sendHome = () => {
@@ -317,6 +328,68 @@ export function Products() {
             </S.InputContainer>
           </S.Row>
         </S.ModalForm>
+      </S.CustomModal>
+      <S.CustomModal
+        open={isAddItemsModalOpen}
+        onCancel={closeAddItemsModal}
+        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
+        okText="ADICIONAR"
+        centered
+        width={400}
+        footer={[
+          <Button
+            label="ADICIONAR"
+            shape="round"
+            color="#f5f6fa"
+            secondColor="#244bc5"
+            buttonFunction={() => console.log("Adicionado")}
+          />,
+        ]}
+      >
+        <h2>PRODUTO XX</h2>
+        <S.ModalForm>
+          <S.InputContainer>
+            <span>NOME:</span>
+            <Input
+              placeholder="NOME DO PRODUTO"
+              color="#244bc5"
+              disabled
+              value="Arroz Jurandir"
+            />
+          </S.InputContainer>
+          <S.InputContainer>
+            <span>QUANTIDADE:</span>
+            <Input placeholder="QUANTIDADE" type="number" color="#244bc5" />
+          </S.InputContainer>
+        </S.ModalForm>
+      </S.CustomModal>
+      <S.CustomModal
+        open={isDeleteModalOpen}
+        onCancel={closeDeleteModal}
+        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
+        okText="ADICIONAR"
+        centered
+        width={400}
+        footer={[
+          <S.ModalButtonRow>
+            <Button
+              label="CANCELAR"
+              shape="round"
+              color="#f5f6fa"
+              secondColor="#244bc5"
+              buttonFunction={closeDeleteModal}
+            />
+            <Button
+              label="DELETAR"
+              shape="round"
+              color="#f5f6fa"
+              secondColor="#C52D24"
+              buttonFunction={() => console.log("Adicionado")}
+            />
+          </S.ModalButtonRow>,
+        ]}
+      >
+        <h2>DELETAR PRODUTO XX?</h2>
       </S.CustomModal>
     </S.Container>
   );

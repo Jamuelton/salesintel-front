@@ -80,6 +80,12 @@ export const CustomSelect = styled(Select)`
   }
 `;
 
+export const ModalButtonRow = styled.section`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+`;
+
 export const SearchButtonContainer = styled.section`
   display: flex;
   justify-content: space-between;
