@@ -4,6 +4,8 @@ import { Input } from "../../components/Input";
 import * as S from "./styles";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
+import { Select } from "antd";
+import { useState } from "react";
 
 interface TableData {
   key: string;
@@ -16,6 +18,7 @@ interface TableData {
 
 export function Products() {
   const navigate = useNavigate();
+  const [isAddProducModalOpen, setIsAddProductModalOpen] = useState(false);
 
   const columns: ColumnsType<TableData> = [
     {
@@ -27,6 +30,11 @@ export function Products() {
       title: "PRODUTO",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "CATEGORIA",
+      dataIndex: "category",
+      key: "category",
     },
     {
       title: "QNTD. TOTAL",
@@ -69,14 +77,18 @@ export function Products() {
     console.log("Deletar item: ", id);
   };
 
-  const addProduct = () => {
-    console.log("Adicionar produto");
+  const addProductModal = () => {
+    setIsAddProductModalOpen(true);
   };
 
   const handleChangeSearch = (e: { target: { value: string } }) => {
     const { value } = e.target;
 
     console.log(value);
+  };
+
+  const closeAddProductModal = () => {
+    setIsAddProductModalOpen(false);
   };
 
   const sendHome = () => {
@@ -202,7 +214,7 @@ export function Products() {
                 shape="round"
                 color="#f5f6fa"
                 secondColor="#244bc5"
-                buttonFunction={() => addProduct()}
+                buttonFunction={() => addProductModal()}
               />
             </S.AddButton>
           </S.SearchButtonContainer>
@@ -214,6 +226,98 @@ export function Products() {
           />
         </S.TableContainer>
       </S.Content>
+      <S.CustomModal
+        open={isAddProducModalOpen}
+        onCancel={closeAddProductModal}
+        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
+        okText="ADICIONAR"
+        centered
+        width={400}
+        footer={[
+          <Button
+            label="ADICIONAR"
+            shape="round"
+            color="#f5f6fa"
+            secondColor="#244bc5"
+            buttonFunction={() => addProductModal()}
+          />,
+        ]}
+      >
+        <h2>ADICIONAR PRODUTO</h2>
+        <S.ModalForm>
+          <S.InputContainer>
+            <span>NOME:</span>
+            <Input placeholder="NOME DO PRODUTO" color="#244bc5" />
+          </S.InputContainer>
+          <S.Row>
+            <S.InputContainer>
+              <span>VALIDADE:</span>
+              <Input placeholder="VALIDADE" type="date" color="#244bc5" />
+            </S.InputContainer>
+            <S.InputContainer>
+              <span>UNIDADE:</span>
+              <Select
+                placeholder="UNIDADE"
+                options={[
+                  {
+                    value: "un",
+                    label: "UN",
+                  },
+                  {
+                    value: "kg",
+                    label: "KG",
+                  },
+                  {
+                    value: "lt",
+                    label: "LT",
+                  },
+                ]}
+              />
+            </S.InputContainer>
+          </S.Row>
+          <S.InputContainer>
+            <span>CATEGORIA:</span>
+            <Select
+              placeholder="CATEGORIA"
+              showSearch
+              options={[
+                {
+                  value: "alimentos",
+                  label: "Alimentos",
+                },
+                {
+                  value: "limpeza",
+                  label: "Produtos de Limpeza",
+                },
+                {
+                  value: "higiene",
+                  label: "Produtos de Higiene",
+                },
+              ]}
+            />
+          </S.InputContainer>
+          <S.Row>
+            <S.InputContainer>
+              <span>LOTE:</span>
+              <Input placeholder="LOTE" type="number" color="#244bc5" />
+            </S.InputContainer>
+            <S.InputContainer>
+              <span>QUANTIDADE:</span>
+              <Input placeholder="QUANTIDADE" type="number" color="#244bc5" />
+            </S.InputContainer>
+          </S.Row>
+          <S.Row>
+            <S.InputContainer>
+              <span>PREÇO DE COMPRA:</span>
+              <Input placeholder="R$00,00" type="number" color="#244bc5" />
+            </S.InputContainer>
+            <S.InputContainer>
+              <span>PREÇO DE VENDA:</span>
+              <Input placeholder="R$00,00" type="number" color="#244bc5" />
+            </S.InputContainer>
+          </S.Row>
+        </S.ModalForm>
+      </S.CustomModal>
     </S.Container>
   );
 }

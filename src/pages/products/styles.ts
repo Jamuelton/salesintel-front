@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Divider } from "antd";
+import { Divider, Modal } from "antd";
 import { Table } from "antd";
 
 export const Container = styled.div`
@@ -36,6 +36,42 @@ export const Line = styled(Divider)`
   .ant-divider {
     color: var(--blue-primary) !important;
   }
+`;
+
+export const CustomModal = styled(Modal)`
+  .ant-modal-content {
+    padding: 42px 40px 42px 40px;
+  }
+
+  h2 {
+    color: var(--blue-primary);
+    text-align: center;
+    padding-bottom: 15px;
+  }
+`;
+
+export const ModalForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 15px;
+`;
+
+export const Row = styled.section`
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+`;
+
+export const InputContainer = styled.div`
+  span {
+    color: var(--blue-primary);
+    font-size: 13px;
+    padding-left: 2px;
+  }
+
+  display: flex;
+  flex-direction: column;
 `;
 
 export const SearchButtonContainer = styled.section`
