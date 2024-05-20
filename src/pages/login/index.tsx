@@ -34,7 +34,7 @@ export function Login() {
   };
 
   const sendHome = () => {
-    navigate("/home");
+    navigate("/dashboard");
   };
 
   const login = () => {

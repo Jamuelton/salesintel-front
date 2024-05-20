@@ -26,6 +26,7 @@ export const Input: React.FC<InputProps> = ({
   inputFunction,
   status,
   errorText,
+  value,
 }) => {
   return (
     <S.Container>
@@ -39,6 +40,7 @@ export const Input: React.FC<InputProps> = ({
         disabled={disabled}
         onChange={inputFunction}
         status={status}
+        value={value}
       />
       {status == "error" && <p>{errorText}*</p>}
     </S.Container>
