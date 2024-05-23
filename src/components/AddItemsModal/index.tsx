@@ -6,17 +6,21 @@ import { Button } from "../Button";
 interface AddItemsModalInterface {
   open?: boolean;
   onCancel?: () => void;
+  id?: number;
+  productName?: string;
 }
 
 export const AddItemsModal: React.FC<AddItemsModalInterface> = ({
   open,
   onCancel,
+  id,
+  productName,
 }) => {
   return (
     <Modal
       open={open}
       onCancel={onCancel}
-      headerText="PRODUTO XX"
+      headerText={`PRODUTO ${id}`}
       footer={[
         <Button
           label="ADICIONAR"
@@ -34,7 +38,7 @@ export const AddItemsModal: React.FC<AddItemsModalInterface> = ({
             placeholder="NOME DO PRODUTO"
             color="#244bc5"
             disabled
-            value="Arroz Jurandir"
+            value={productName}
           />
         </S.InputContainer>
         <S.InputContainer>

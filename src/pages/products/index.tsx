@@ -20,9 +20,12 @@ interface TableData {
 
 export function Products() {
   const navigate = useNavigate();
-  const [isAddProducModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
+  const [addItemsId, setAddItemsId] = useState(0);
+  const [addItemsName, setAddItemsName] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
 
   const columns: ColumnsType<TableData> = [
     {
@@ -58,7 +61,7 @@ export function Products() {
             size={24}
             weight="bold"
             color="#244BC5"
-            onClick={() => addItems(record.id)}
+            onClick={() => addItems(record.id, record.name)}
             cursor={"pointer"}
           />
           <XCircle
@@ -73,13 +76,14 @@ export function Products() {
     },
   ];
 
-  const addItems = (id: number) => {
-    console.log(id);
+  const addItems = (id: number, name: string) => {
+    setAddItemsId(id);
+    setAddItemsName(name);
     setIsAddItemsModalOpen(true);
   };
 
   const deleteItem = (id: number) => {
-    console.log("Deletar item: ", id);
+    setDeleteId(id);
     setIsDeleteModalOpen(true);
   };
 
@@ -202,7 +206,6 @@ export function Products() {
 
   return (
     <S.Container>
-      <div>Navbar</div>
       <S.Content>
         <div>
           <h2>
@@ -241,11 +244,20 @@ export function Products() {
         </S.TableContainer>
       </S.Content>
       <AddProductModal
-        open={isAddProducModalOpen}
+        open={isAddProductModalOpen}
         onCancel={closeAddProductModal}
       />
-      <AddItemsModal open={isAddItemsModalOpen} onCancel={closeAddItemsModal} />
-      <DeleteModal open={isDeleteModalOpen} onCancel={closeDeleteModal} />
+      <AddItemsModal
+        open={isAddItemsModalOpen}
+        onCancel={closeAddItemsModal}
+        id={addItemsId}
+        productName={addItemsName}
+      />
+      <DeleteModal
+        open={isDeleteModalOpen}
+        onCancel={closeDeleteModal}
+        id={deleteId}
+      />
     </S.Container>
   );
 }
