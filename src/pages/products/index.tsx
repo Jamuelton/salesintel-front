@@ -5,6 +5,9 @@ import * as S from "./styles";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { AddProductModal } from "../../components/AddProductModal";
+import { AddItemsModal } from "../../components/AddItemsModal";
+import { DeleteModal } from "../../components/DeleteModal";
 
 interface TableData {
   key: string;
@@ -237,160 +240,12 @@ export function Products() {
           />
         </S.TableContainer>
       </S.Content>
-      <S.CustomModal
+      <AddProductModal
         open={isAddProducModalOpen}
         onCancel={closeAddProductModal}
-        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
-        okText="ADICIONAR"
-        centered
-        width={400}
-        footer={[
-          <Button
-            label="ADICIONAR"
-            shape="round"
-            color="#f5f6fa"
-            secondColor="#244bc5"
-            buttonFunction={() => addProductModal()}
-          />,
-        ]}
-      >
-        <h2>ADICIONAR PRODUTO</h2>
-        <S.ModalForm>
-          <S.InputContainer>
-            <span>NOME:</span>
-            <Input placeholder="NOME DO PRODUTO" color="#244bc5" />
-          </S.InputContainer>
-          <S.Row>
-            <S.InputContainer>
-              <span>VALIDADE:</span>
-              <Input placeholder="VALIDADE" type="date" color="#244bc5" />
-            </S.InputContainer>
-            <S.InputContainer>
-              <span>UNIDADE:</span>
-              <S.CustomSelect
-                placeholder="UNIDADE"
-                options={[
-                  {
-                    value: "un",
-                    label: "UN",
-                  },
-                  {
-                    value: "kg",
-                    label: "KG",
-                  },
-                  {
-                    value: "lt",
-                    label: "LT",
-                  },
-                ]}
-              />
-            </S.InputContainer>
-          </S.Row>
-          <S.InputContainer>
-            <span>CATEGORIA:</span>
-            <S.CustomSelect
-              placeholder="CATEGORIA"
-              showSearch
-              options={[
-                {
-                  value: "alimentos",
-                  label: "Alimentos",
-                },
-                {
-                  value: "limpeza",
-                  label: "Produtos de Limpeza",
-                },
-                {
-                  value: "higiene",
-                  label: "Produtos de Higiene",
-                },
-              ]}
-            />
-          </S.InputContainer>
-          <S.Row>
-            <S.InputContainer>
-              <span>LOTE:</span>
-              <Input placeholder="LOTE" type="number" color="#244bc5" />
-            </S.InputContainer>
-            <S.InputContainer>
-              <span>QUANTIDADE:</span>
-              <Input placeholder="QUANTIDADE" type="number" color="#244bc5" />
-            </S.InputContainer>
-          </S.Row>
-          <S.Row>
-            <S.InputContainer>
-              <span>PREÇO DE COMPRA:</span>
-              <Input placeholder="R$00,00" type="number" color="#244bc5" />
-            </S.InputContainer>
-            <S.InputContainer>
-              <span>PREÇO DE VENDA:</span>
-              <Input placeholder="R$00,00" type="number" color="#244bc5" />
-            </S.InputContainer>
-          </S.Row>
-        </S.ModalForm>
-      </S.CustomModal>
-      <S.CustomModal
-        open={isAddItemsModalOpen}
-        onCancel={closeAddItemsModal}
-        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
-        okText="ADICIONAR"
-        centered
-        width={400}
-        footer={[
-          <Button
-            label="ADICIONAR"
-            shape="round"
-            color="#f5f6fa"
-            secondColor="#244bc5"
-            buttonFunction={() => console.log("Adicionado")}
-          />,
-        ]}
-      >
-        <h2>PRODUTO XX</h2>
-        <S.ModalForm>
-          <S.InputContainer>
-            <span>NOME:</span>
-            <Input
-              placeholder="NOME DO PRODUTO"
-              color="#244bc5"
-              disabled
-              value="Arroz Jurandir"
-            />
-          </S.InputContainer>
-          <S.InputContainer>
-            <span>QUANTIDADE:</span>
-            <Input placeholder="QUANTIDADE" type="number" color="#244bc5" />
-          </S.InputContainer>
-        </S.ModalForm>
-      </S.CustomModal>
-      <S.CustomModal
-        open={isDeleteModalOpen}
-        onCancel={closeDeleteModal}
-        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
-        okText="ADICIONAR"
-        centered
-        width={400}
-        footer={[
-          <S.ModalButtonRow>
-            <Button
-              label="CANCELAR"
-              shape="round"
-              color="#f5f6fa"
-              secondColor="#244bc5"
-              buttonFunction={closeDeleteModal}
-            />
-            <Button
-              label="DELETAR"
-              shape="round"
-              color="#f5f6fa"
-              secondColor="#C52D24"
-              buttonFunction={() => console.log("Adicionado")}
-            />
-          </S.ModalButtonRow>,
-        ]}
-      >
-        <h2>DELETAR PRODUTO XX?</h2>
-      </S.CustomModal>
+      />
+      <AddItemsModal open={isAddItemsModalOpen} onCancel={closeAddItemsModal} />
+      <DeleteModal open={isDeleteModalOpen} onCancel={closeDeleteModal} />
     </S.Container>
   );
 }

@@ -38,31 +38,6 @@ export const Line = styled(Divider)`
   }
 `;
 
-export const CustomModal = styled(Modal)`
-  .ant-modal-content {
-    padding: 42px 40px 42px 40px;
-  }
-
-  h2 {
-    color: var(--blue-primary);
-    text-align: center;
-    padding-bottom: 15px;
-  }
-`;
-
-export const ModalForm = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding-bottom: 15px;
-`;
-
-export const Row = styled.section`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-`;
-
 export const InputContainer = styled.div`
   span {
     color: var(--blue-primary);
@@ -72,18 +47,6 @@ export const InputContainer = styled.div`
 
   display: flex;
   flex-direction: column;
-`;
-
-export const CustomSelect = styled(Select)`
-  .ant-select-selector {
-    border-color: var(--blue-primary) !important;
-  }
-`;
-
-export const ModalButtonRow = styled.section`
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
 `;
 
 export const SearchButtonContainer = styled.section`
