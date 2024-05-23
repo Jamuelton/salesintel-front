@@ -8,6 +8,10 @@ import {
 import { Button } from "../../components/Button";
 import * as S from "./styles";
 import { ProductList } from "../../components/productList";
+import { useState } from "react";
+import { CheckboxProps } from "antd";
+import { Input } from "../../components/Input";
+import { Select } from "../../components/Select";
 
 export function Home() {
   const PRODUCT_DATA_TEST = [
@@ -65,6 +69,25 @@ export function Home() {
 
   const itemsToShow = PRODUCT_DATA_TEST.slice(0, 7);
 
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [samePrice, setSamePrice] = useState<boolean>(true);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const onChange: CheckboxProps["onChange"] = () => {
+    setSamePrice(!samePrice);
+  };
+
   return (
     <S.Container>
       <S.NavbarArea>navbar</S.NavbarArea>
@@ -106,6 +129,7 @@ export function Home() {
                   icon={<PlusSquare size={20} />}
                   shape="round"
                   size="large"
+                  buttonFunction={showModal}
                 />
                 <S.AreaTwo>Area 2</S.AreaTwo>
               </S.RegisterSellerArea>
@@ -129,6 +153,45 @@ export function Home() {
           </S.StatusArea>
         </S.PrincipalContent>
       </S.Content>
+      <S.RegisterSellModal
+        title="Registrar venda"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        okText={"Registrar"}
+      >
+        <section>
+          <S.SelectAreaModal>
+            <S.LightText>Produto:</S.LightText>
+            <Select defaut="Selecione" />
+          </S.SelectAreaModal>
+          <S.PriceAreaModal>
+            <div>
+              <S.LightText>Preço de venda:</S.LightText>
+              <S.HeavyText>R$ 30,00</S.HeavyText>
+            </div>
+            <div>
+              <S.LightText>Unidade:</S.LightText>
+              <S.HeavyText>KG</S.HeavyText>
+            </div>
+          </S.PriceAreaModal>
+          <S.SelectAreaModal>
+            <S.LightText>Categoria da venda:</S.LightText>
+            <Select defaut="Selecione" />
+          </S.SelectAreaModal>
+          <div>
+            <S.BoxPrice onChange={onChange}>
+              vender pelo mesmo valor cadastrado
+            </S.BoxPrice>
+          </div>
+          {samePrice && (
+            <S.InputAreaModal>
+              <S.LightText>Valor da venda(UN):</S.LightText>
+              <Input leftIcon={"R$"} placeholder="00,00" color="#244bc5" />
+            </S.InputAreaModal>
+          )}
+        </section>
+      </S.RegisterSellModal>
     </S.Container>
   );
 }

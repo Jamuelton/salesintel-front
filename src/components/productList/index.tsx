@@ -14,11 +14,15 @@ export const ProductList: React.FC<ProductListInterface> = ({
 }) => {
   return (
     <S.Container>
-      <label htmlFor="">{name}</label>
-      <label htmlFor="">R$ {price}</label>
-      <label htmlFor="">{quantity}</label>
-      <PencilSimple size={24} />
-      <Eye size={24} />
+      <S.LabelArea>
+        <label htmlFor="">{name}</label>
+        <label htmlFor="">R$ {price}</label>
+        <label htmlFor="">{quantity}</label>
+      </S.LabelArea>
+      <S.IconArea>
+        <PencilSimple size={24} />
+        <Eye size={24} />
+      </S.IconArea>
     </S.Container>
   );
 };

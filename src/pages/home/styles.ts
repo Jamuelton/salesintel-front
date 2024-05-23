@@ -1,4 +1,4 @@
-import { Divider } from "antd";
+import { Checkbox, Divider, Modal } from "antd";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -72,7 +72,7 @@ export const ProductArea = styled.div`
   background: var(--white-secondary);
   padding: 1rem;
   border-radius: 1rem;
-  width: 50%;
+  width: 100%;
   height: 100%;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
@@ -80,6 +80,15 @@ export const ProductArea = styled.div`
   flex-direction: column;
 
   gap: 12px;
+
+  @media (min-width: 426px) and (max-width: 1023px) {
+    width: 100%;
+    height: 100dvh;
+  }
+  @media (min-width: 1024px) {
+    width: 50%;
+    height: 100%;
+  }
 `;
 
 export const ProductAreaTitle = styled.div`
@@ -203,4 +212,82 @@ export const ButtonArea = styled.div`
   @media (min-width: 1024px) {
     flex-direction: row;
   }
+`;
+
+export const RegisterSellModal = styled(Modal)`
+  padding: 1rem;
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ant-modal-footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ant-btn-default {
+    display: none;
+  }
+
+  .ant-btn-primary {
+    background: var(--blue-primary);
+    width: 50%;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+
+  .ant-modal-header {
+    display: flex;
+    justify-content: center;
+  }
+
+  .ant-modal-title {
+    color: var(--blue-primary);
+    font-size: 1.5rem;
+  }
+`;
+
+export const LightText = styled.label`
+  color: var(--blue-primary);
+  font-weight: 100;
+`;
+
+export const HeavyText = styled.label`
+  color: var(--blue-primary);
+  font-weight: 700;
+`;
+
+export const PriceAreaModal = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  gap: 1rem;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+`;
+
+export const BoxPrice = styled(Checkbox)`
+  span {
+    color: var(--blue-primary);
+  }
+`;
+
+export const SelectAreaModal = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+export const InputAreaModal = styled.div`
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
