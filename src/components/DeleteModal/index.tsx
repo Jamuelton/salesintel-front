@@ -6,18 +6,20 @@ interface DeleteModalInterface {
   open?: boolean;
   onCancel?: () => void;
   id?: number;
+  headerText?: string;
 }
 
 export const DeleteModal: React.FC<DeleteModalInterface> = ({
   open,
   onCancel,
   id,
+  headerText,
 }) => {
   return (
     <Modal
       open={open}
       onCancel={onCancel}
-      headerText={`DELETAR PRODUTO ${id}?`}
+      headerText={headerText}
       footer={[
         <S.ModalButtonRow>
           <Button
