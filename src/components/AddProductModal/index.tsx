@@ -238,6 +238,8 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
               status={errorquantity?.errorType}
               errorText={"Insira um valor maior que 0"}
               inputFunction={handleChangeQuantity}
+              min={1}
+              step={1}
             />
           </S.InputContainer>
         </S.Row>
@@ -251,6 +253,8 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
               status={errorPurchasePrice?.errorType}
               errorText={"Insira um preço maior que 0"}
               inputFunction={handleChangePurchasePrice}
+              min={0.01}
+              step={0.01}
             />
           </S.InputContainer>
           <S.InputContainer>
@@ -262,6 +266,8 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
               status={errorSalePrice?.errorType}
               errorText={"Insira um preço maior que 0"}
               inputFunction={handleChangeSalePrice}
+              min={0.01}
+              step={0.01}
             />
           </S.InputContainer>
         </S.Row>
