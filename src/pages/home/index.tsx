@@ -72,6 +72,10 @@ export function Home() {
     navigate("/products");
   };
 
+  const sendToSales = () => {
+    navigate("/sales");
+  };
+
   return (
     <S.Container>
       <div>navbar</div>
@@ -129,6 +133,7 @@ export function Home() {
                 secondColor="#244bc5"
                 shape="round"
                 icon={<Basket size={20} />}
+                buttonFunction={sendToSales}
               />
               <Button
                 label="Relatorio Financeiro"
