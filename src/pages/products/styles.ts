@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Divider, Modal, Select } from "antd";
+import { Divider } from "antd";
 import { Table } from "antd";
 
 export const Container = styled.div`

@@ -63,6 +63,7 @@ export function Products() {
             color="#244BC5"
             onClick={() => addItems(record.id, record.name)}
             cursor={"pointer"}
+            alt="Adicionar itens"
           />
           <XCircle
             size={24}
@@ -70,6 +71,7 @@ export function Products() {
             color="#C52D24"
             onClick={() => deleteItem(record.id)}
             cursor={"pointer"}
+            alt="Deletar produto"
           />
         </>
       ),
