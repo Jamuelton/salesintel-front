@@ -5,6 +5,9 @@ import * as S from "./styles";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { AddProductModal } from "../../components/AddProductModal";
+import { AddItemsModal } from "../../components/AddItemsModal";
+import { DeleteModal } from "../../components/DeleteModal";
 
 interface TableData {
   key: string;
@@ -17,9 +20,13 @@ interface TableData {
 
 export function Products() {
   const navigate = useNavigate();
-  const [isAddProducModalOpen, setIsAddProductModalOpen] = useState(false);
+  const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
+  const [addItemsId, setAddItemsId] = useState(0);
+  const [addItemsName, setAddItemsName] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
 
   const columns: ColumnsType<TableData> = [
     {
@@ -55,8 +62,9 @@ export function Products() {
             size={24}
             weight="bold"
             color="#244BC5"
-            onClick={() => addItems(record.id)}
+            onClick={() => addItems(record.id, record.name)}
             cursor={"pointer"}
+            alt="Adicionar itens"
           />
           <XCircle
             size={24}
@@ -64,19 +72,21 @@ export function Products() {
             color="#C52D24"
             onClick={() => deleteItem(record.id)}
             cursor={"pointer"}
+            alt="Deletar produto"
           />
         </>
       ),
     },
   ];
 
-  const addItems = (id: number) => {
-    console.log(id);
+  const addItems = (id: number, name: string) => {
+    setAddItemsId(id);
+    setAddItemsName(name);
     setIsAddItemsModalOpen(true);
   };
 
   const deleteItem = (id: number) => {
-    console.log("Deletar item: ", id);
+    setDeleteId(id);
     setIsDeleteModalOpen(true);
   };
 
@@ -87,7 +97,7 @@ export function Products() {
   const handleChangeSearch = (e: { target: { value: string } }) => {
     const { value } = e.target;
 
-    console.log(value);
+    setSearchTerm(value);
   };
 
   const closeAddProductModal = () => {
@@ -197,9 +207,12 @@ export function Products() {
     },
   ];
 
+  const dataFiltered = data.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <S.Container>
-      <div>Navbar</div>
       <S.Content>
         <div>
           <h2>
@@ -232,165 +245,27 @@ export function Products() {
           <S.StyledTable
             columns={columns}
             bordered
-            dataSource={data}
+            dataSource={dataFiltered}
             pagination={{ pageSize: 9 }}
+            locale={{ emptyText: "Nenhum produto encontrado" }}
           />
         </S.TableContainer>
       </S.Content>
-      <S.CustomModal
-        open={isAddProducModalOpen}
+      <AddProductModal
+        open={isAddProductModalOpen}
         onCancel={closeAddProductModal}
-        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
-        okText="ADICIONAR"
-        centered
-        width={400}
-        footer={[
-          <Button
-            label="ADICIONAR"
-            shape="round"
-            color="#f5f6fa"
-            secondColor="#244bc5"
-            buttonFunction={() => addProductModal()}
-          />,
-        ]}
-      >
-        <h2>ADICIONAR PRODUTO</h2>
-        <S.ModalForm>
-          <S.InputContainer>
-            <span>NOME:</span>
-            <Input placeholder="NOME DO PRODUTO" color="#244bc5" />
-          </S.InputContainer>
-          <S.Row>
-            <S.InputContainer>
-              <span>VALIDADE:</span>
-              <Input placeholder="VALIDADE" type="date" color="#244bc5" />
-            </S.InputContainer>
-            <S.InputContainer>
-              <span>UNIDADE:</span>
-              <S.CustomSelect
-                placeholder="UNIDADE"
-                options={[
-                  {
-                    value: "un",
-                    label: "UN",
-                  },
-                  {
-                    value: "kg",
-                    label: "KG",
-                  },
-                  {
-                    value: "lt",
-                    label: "LT",
-                  },
-                ]}
-              />
-            </S.InputContainer>
-          </S.Row>
-          <S.InputContainer>
-            <span>CATEGORIA:</span>
-            <S.CustomSelect
-              placeholder="CATEGORIA"
-              showSearch
-              options={[
-                {
-                  value: "alimentos",
-                  label: "Alimentos",
-                },
-                {
-                  value: "limpeza",
-                  label: "Produtos de Limpeza",
-                },
-                {
-                  value: "higiene",
-                  label: "Produtos de Higiene",
-                },
-              ]}
-            />
-          </S.InputContainer>
-          <S.Row>
-            <S.InputContainer>
-              <span>LOTE:</span>
-              <Input placeholder="LOTE" type="number" color="#244bc5" />
-            </S.InputContainer>
-            <S.InputContainer>
-              <span>QUANTIDADE:</span>
-              <Input placeholder="QUANTIDADE" type="number" color="#244bc5" />
-            </S.InputContainer>
-          </S.Row>
-          <S.Row>
-            <S.InputContainer>
-              <span>PREÇO DE COMPRA:</span>
-              <Input placeholder="R$00,00" type="number" color="#244bc5" />
-            </S.InputContainer>
-            <S.InputContainer>
-              <span>PREÇO DE VENDA:</span>
-              <Input placeholder="R$00,00" type="number" color="#244bc5" />
-            </S.InputContainer>
-          </S.Row>
-        </S.ModalForm>
-      </S.CustomModal>
-      <S.CustomModal
+      />
+      <AddItemsModal
         open={isAddItemsModalOpen}
         onCancel={closeAddItemsModal}
-        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
-        okText="ADICIONAR"
-        centered
-        width={400}
-        footer={[
-          <Button
-            label="ADICIONAR"
-            shape="round"
-            color="#f5f6fa"
-            secondColor="#244bc5"
-            buttonFunction={() => console.log("Adicionado")}
-          />,
-        ]}
-      >
-        <h2>PRODUTO XX</h2>
-        <S.ModalForm>
-          <S.InputContainer>
-            <span>NOME:</span>
-            <Input
-              placeholder="NOME DO PRODUTO"
-              color="#244bc5"
-              disabled
-              value="Arroz Jurandir"
-            />
-          </S.InputContainer>
-          <S.InputContainer>
-            <span>QUANTIDADE:</span>
-            <Input placeholder="QUANTIDADE" type="number" color="#244bc5" />
-          </S.InputContainer>
-        </S.ModalForm>
-      </S.CustomModal>
-      <S.CustomModal
+        id={addItemsId}
+        productName={addItemsName}
+      />
+      <DeleteModal
         open={isDeleteModalOpen}
         onCancel={closeDeleteModal}
-        closeIcon={<XCircle size={28} color="#C52D24" weight="bold" />}
-        okText="ADICIONAR"
-        centered
-        width={400}
-        footer={[
-          <S.ModalButtonRow>
-            <Button
-              label="CANCELAR"
-              shape="round"
-              color="#f5f6fa"
-              secondColor="#244bc5"
-              buttonFunction={closeDeleteModal}
-            />
-            <Button
-              label="DELETAR"
-              shape="round"
-              color="#f5f6fa"
-              secondColor="#C52D24"
-              buttonFunction={() => console.log("Adicionado")}
-            />
-          </S.ModalButtonRow>,
-        ]}
-      >
-        <h2>DELETAR PRODUTO XX?</h2>
-      </S.CustomModal>
+        id={deleteId}
+      />
     </S.Container>
   );
 }
