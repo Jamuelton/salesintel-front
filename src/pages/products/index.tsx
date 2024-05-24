@@ -24,6 +24,7 @@ export function Products() {
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
   const [addItemsId, setAddItemsId] = useState(0);
   const [addItemsName, setAddItemsName] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
 
@@ -96,7 +97,7 @@ export function Products() {
   const handleChangeSearch = (e: { target: { value: string } }) => {
     const { value } = e.target;
 
-    console.log(value);
+    setSearchTerm(value);
   };
 
   const closeAddProductModal = () => {
@@ -206,6 +207,10 @@ export function Products() {
     },
   ];
 
+  const dataFiltered = data.filter((item) =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <S.Container>
       <S.Content>
@@ -240,8 +245,9 @@ export function Products() {
           <S.StyledTable
             columns={columns}
             bordered
-            dataSource={data}
+            dataSource={dataFiltered}
             pagination={{ pageSize: 9 }}
+            locale={{ emptyText: "Nenhum produto encontrado" }}
           />
         </S.TableContainer>
       </S.Content>
