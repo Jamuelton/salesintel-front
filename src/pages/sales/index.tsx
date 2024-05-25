@@ -10,6 +10,7 @@ import { Button } from "../../components/Button";
 import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { DeleteModal } from "../../components/DeleteModal";
+import { SalesReportModal } from "../../components/SalesReportModal";
 
 interface TableData {
   key: string;
@@ -25,11 +26,20 @@ export function Sales() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const [isSalesReportModalOpen, setIsSalesReportModalOpen] = useState(false);
 
   const handleChangeSearch = (e: { target: { value: string } }) => {
     const { value } = e.target;
 
     setSearchTerm(value);
+  };
+
+  const salesReportModal = () => {
+    setIsSalesReportModalOpen(true);
+  };
+
+  const closeSalesReportModal = () => {
+    setIsSalesReportModalOpen(false);
   };
 
   const deleteItem = (id: number) => {
@@ -219,7 +229,7 @@ export function Sales() {
                 shape="round"
                 color="#f5f6fa"
                 secondColor="#244bc5"
-                // buttonFunction={() => addProductModal()}
+                buttonFunction={() => salesReportModal()}
               />
             </S.AddButton>
           </S.SearchButtonContainer>
@@ -236,6 +246,10 @@ export function Sales() {
           onCancel={closeDeleteModal}
           open={isDeleteModalOpen}
           headerText={`DELETAR VENDA ${deleteId}?`}
+        />
+        <SalesReportModal
+          onCancel={closeSalesReportModal}
+          open={isSalesReportModalOpen}
         />
       </S.Content>
     </S.Container>
