@@ -13,6 +13,9 @@ interface InputProps {
   inputFunction?: React.ChangeEventHandler<HTMLInputElement>;
   status?: "" | "warning" | "error" | undefined;
   errorText?: string;
+  min?: number;
+  max?: number;
+  step?: number;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -26,6 +29,10 @@ export const Input: React.FC<InputProps> = ({
   inputFunction,
   status,
   errorText,
+  value,
+  min,
+  max,
+  step,
 }) => {
   return (
     <S.Container>
@@ -39,6 +46,10 @@ export const Input: React.FC<InputProps> = ({
         disabled={disabled}
         onChange={inputFunction}
         status={status}
+        value={value}
+        min={min}
+        max={max}
+        step={step}
       />
       {status == "error" && <p>{errorText}*</p>}
     </S.Container>
