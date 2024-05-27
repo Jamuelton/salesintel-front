@@ -265,6 +265,7 @@ export function Products() {
         open={isDeleteModalOpen}
         onCancel={closeDeleteModal}
         id={deleteId}
+        headerText={`DELETAR PRODUTO ${deleteId}`}
       />
     </S.Container>
   );
