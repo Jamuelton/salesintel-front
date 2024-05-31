@@ -13,8 +13,11 @@ import { useState } from "react";
 import { CheckboxProps } from "antd";
 import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
+import { useNavigate } from "react-router-dom";
 
 export function Home() {
+  const navigate = useNavigate();
+
   const PRODUCT_DATA_TEST = [
     {
       name: "transmissao",
@@ -87,6 +90,13 @@ export function Home() {
 
   const onChange: CheckboxProps["onChange"] = () => {
     setSamePrice(!samePrice);
+
+  const sendToProducts = () => {
+    navigate("/products");
+  };
+
+  const sendToSales = () => {
+    navigate("/sales");
   };
 
   return (
@@ -103,7 +113,12 @@ export function Home() {
           <S.ProductArea>
             <S.ProductAreaTitle>
               <h3>Produtos</h3>
-              <ArrowCircleRight size={32} weight="fill" color="#244bc5" />
+              <ArrowCircleRight
+                size={32}
+                weight="fill"
+                color="#244bc5"
+                onClick={() => sendToProducts()}
+              />
             </S.ProductAreaTitle>
             <S.ProductAreaList>
               {itemsToShow.map((item, index) => (
@@ -144,6 +159,7 @@ export function Home() {
                 secondColor="#244bc5"
                 shape="round"
                 icon={<Basket size={20} />}
+                buttonFunction={sendToSales}
               />
               <Button
                 label="Relatorio Financeiro"
