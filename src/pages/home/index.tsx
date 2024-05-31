@@ -90,6 +90,7 @@ export function Home() {
 
   const onChange: CheckboxProps["onChange"] = () => {
     setSamePrice(!samePrice);
+  };
 
   const sendToProducts = () => {
     navigate("/products");
