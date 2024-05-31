@@ -34,13 +34,19 @@ export const Content = styled.section`
   }
 `;
 
-export const NavbarArea = styled.div`
-  display: none;
-  @media (min-width: 426px) and (max-width: 1023px) {
-    display: none;
-  }
-  @media (min-width: 1024px) {
+export const Header = styled.div`
+  div {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+  h2 {
+    color: var(--blue-primary);
+    cursor: pointer;
   }
 `;
 
