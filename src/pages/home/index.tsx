@@ -4,6 +4,7 @@ import {
   DotsThreeOutline,
   PlusSquare,
   Receipt,
+  UserCircle,
 } from "@phosphor-icons/react";
 import { Button } from "../../components/Button";
 import * as S from "./styles";
@@ -101,12 +102,14 @@ export function Home() {
 
   return (
     <S.Container>
-      <S.NavbarArea>navbar</S.NavbarArea>
       <S.Content>
-        <div>
-          <h2>Nome da Empresa</h2>
+        <S.Header>
+          <div>
+            <h2>Nome da Empresa</h2>
+            <UserCircle size={36} weight="fill" color="#244bc5" />
+          </div>
           <S.Line style={{ borderTop: "1px solid #244bc5" }} />
-        </div>
+        </S.Header>
         <S.PrincipalContent>
           <S.ProductArea>
             <S.ProductAreaTitle>
