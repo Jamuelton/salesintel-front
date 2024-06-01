@@ -248,6 +248,7 @@ export function Products() {
             dataSource={dataFiltered}
             pagination={{ pageSize: 9 }}
             locale={{ emptyText: "Nenhum produto encontrado" }}
+            scroll={{ x: true }}
           />
         </S.TableContainer>
       </S.Content>
