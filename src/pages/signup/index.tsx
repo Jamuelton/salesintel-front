@@ -10,7 +10,8 @@ import * as S from "./styles";
 import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { RegisterSchema } from "../../services/types/signType";
+import { UserInterface, UserSchema } from "../../services/types/userType";
+import { PostUser } from "../../services/userServices";
 
 interface ErrorInterface {
   errorType: "" | "warning" | "error" | undefined;
@@ -20,9 +21,9 @@ interface ErrorInterface {
 export function SignUp() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [passWord, setPassWord] = useState<string>();
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [passWord, setPassWord] = useState<string>("");
 
   const [errorName, setErrorName] = useState<ErrorInterface>();
   const [errorEmail, setErrorEmail] = useState<ErrorInterface>();
@@ -31,7 +32,7 @@ export function SignUp() {
   const handleChangeEmail = (e: { target: { value: string } }) => {
     const { value } = e.target;
     try {
-      RegisterSchema.shape.email.parse(value);
+      UserSchema.shape.email.parse(value);
       setErrorEmail({ errorType: "", errorShow: false });
     } catch (error) {
       setErrorEmail({ errorType: "error", errorShow: true });
@@ -42,7 +43,7 @@ export function SignUp() {
   const handleChangeName = (e: { target: { value: string } }) => {
     const { value } = e.target;
     try {
-      RegisterSchema.shape.name.parse(value);
+      UserSchema.shape.company.parse(value);
       setErrorName({ errorType: "", errorShow: false });
     } catch (error) {
       setErrorName({ errorType: "error", errorShow: true });
@@ -53,7 +54,7 @@ export function SignUp() {
   const handleChangePassWord = (e: { target: { value: string } }) => {
     const { value } = e.target;
     try {
-      RegisterSchema.shape.password.parse(value);
+      UserSchema.shape.password.parse(value);
       setErrorPassword({ errorType: "", errorShow: false });
     } catch (error) {
       setErrorPassword({ errorType: "error", errorShow: true });
@@ -65,11 +66,18 @@ export function SignUp() {
     navigate("/login");
   };
 
-  const sign = () => {
-    console.log("Empresa: " + name);
-    console.log("Email: " + email);
-    console.log("Senha: " + passWord);
-    backLogin();
+  const signData: UserInterface = {
+    company: name,
+    email: email,
+    password: passWord,
+  };
+
+  const sign = async () => {
+    const response = await PostUser(signData);
+    if (response?.status == 200) {
+      alert("Cadastro realizado");
+      backLogin();
+    }
   };
 
   return (

@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-export interface RegisterInterface {
-  name?: string;
+export interface UserInterface {
+  company?: string;
   email: string;
   password: string;
 }
 
-export const RegisterSchema = z.object({
-  name: z
+export const UserSchema = z.object({
+  company: z
     .string({
       required_error: "O nome é obrigatório",
     })
