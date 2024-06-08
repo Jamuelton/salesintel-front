@@ -9,10 +9,10 @@ export interface UserInterface {
 export const UserSchema = z.object({
   company: z
     .string({
-      required_error: "O nome é obrigatório",
+      required_error: "O nome da empresa é obrigatório",
     })
-    .min(2, { message: "Necessário mais de 2 caracteres" })
-    .max(20, { message: "Apenas 20 caracteres permitidos" }),
+    .min(2, { message: "Necessário mais de 2 caracteres no nome da empresa" })
+    .max(20, { message: "Apenas 20 caracteres permitidos no nome da empresa" }),
   email: z
     .string({
       required_error: "O email é obrigatório",

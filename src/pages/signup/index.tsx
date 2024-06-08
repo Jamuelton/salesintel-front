@@ -10,8 +10,9 @@ import * as S from "./styles";
 import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { UserInterface, UserSchema } from "../../services/types/userType";
+import { UserSchema } from "../../services/types/userType";
 import { PostUser } from "../../services/userServices";
+import { ZodError } from "zod";
 
 interface ErrorInterface {
   errorType: "" | "warning" | "error" | undefined;
@@ -21,9 +22,9 @@ interface ErrorInterface {
 export function SignUp() {
   const navigate = useNavigate();
 
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [passWord, setPassWord] = useState<string>("");
+  const [name, setName] = useState<string>();
+  const [email, setEmail] = useState<string>();
+  const [passWord, setPassWord] = useState<string>();
 
   const [errorName, setErrorName] = useState<ErrorInterface>();
   const [errorEmail, setErrorEmail] = useState<ErrorInterface>();
@@ -66,18 +67,22 @@ export function SignUp() {
     navigate("/login");
   };
 
-  const signData: UserInterface = {
-    company: name,
-    email: email,
-    password: passWord,
-  };
-
   const sign = async () => {
-    console.log(signData);
-    const response = await PostUser(signData);
-    if (response?.status == 201) {
-      alert("Cadastro realizado");
-      backLogin();
+    try {
+      const signData = UserSchema.parse({
+        company: name,
+        email: email,
+        password: passWord,
+      });
+      const response = await PostUser(signData);
+      if (response?.status == 201) {
+        alert("Cadastro realizado");
+        backLogin();
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        alert(error.issues[0].message);
+      }
     }
   };
 
