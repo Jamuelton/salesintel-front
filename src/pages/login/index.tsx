@@ -7,9 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { LoginUser } from "../../services/userServices";
 import { UserInterface } from "../../services/types/userType";
+import Cookies from "js-cookie";
+import { useAuth } from "../../config/auth/UseAuth";
 
 export function Login() {
   const navigate = useNavigate();
+
+  const { auth, reloadPage } = useAuth();
 
   const [email, setEmail] = useState<string>("");
   const [passWord, setPassWord] = useState<string>("");
@@ -41,6 +45,12 @@ export function Login() {
   const login = async () => {
     const response = await LoginUser(LoginData);
     if (response?.status == 200) {
+      const tokenDuration = new Date(Date.now() + 1000 * 60 * 60 * 40);
+      Cookies.set("token", response.data.token, {
+        expires: tokenDuration,
+      });
+      auth();
+      reloadPage();
       alert("Usuário logado com sucesso");
       sendHome();
     }
