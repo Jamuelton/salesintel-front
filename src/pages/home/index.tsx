@@ -16,6 +16,7 @@ import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
+import { warningNotification } from "../../components/Notification";
 
 export function Home() {
   const navigate = useNavigate();
@@ -111,7 +112,7 @@ export function Home() {
   const logouting = () => {
     logout();
     reloadPage();
-    alert("usuario deslogado");
+    warningNotification("Usuário deslogado");
     sendToLogin();
   };
 

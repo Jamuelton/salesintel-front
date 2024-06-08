@@ -9,6 +9,10 @@ import { LoginUser } from "../../services/userServices";
 import { UserInterface } from "../../services/types/userType";
 import Cookies from "js-cookie";
 import { useAuth } from "../../config/auth/UseAuth";
+import {
+  errorNotification,
+  successNotification,
+} from "../../components/Notification";
 
 export function Login() {
   const navigate = useNavigate();
@@ -51,11 +55,11 @@ export function Login() {
       });
       auth();
       reloadPage();
-      alert("Usuário logado com sucesso");
+      successNotification("Usuário logado com sucesso");
       sendHome();
     }
     if (response?.status == 403 || response?.status == 400) {
-      alert("email e/ou senha incorretos");
+      errorNotification("email e/ou senha incorretos");
     }
   };
   return (

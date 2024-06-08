@@ -13,6 +13,10 @@ import { useState } from "react";
 import { UserSchema } from "../../services/types/userType";
 import { PostUser } from "../../services/userServices";
 import { ZodError } from "zod";
+import {
+  successNotification,
+  warningNotification,
+} from "../../components/Notification";
 
 interface ErrorInterface {
   errorType: "" | "warning" | "error" | undefined;
@@ -76,12 +80,12 @@ export function SignUp() {
       });
       const response = await PostUser(signData);
       if (response?.status == 201) {
-        alert("Cadastro realizado");
+        successNotification("Cadastro realizado");
         backLogin();
       }
     } catch (error) {
       if (error instanceof ZodError) {
-        alert(error.issues[0].message);
+        warningNotification(error.issues[0].message);
       }
     }
   };
