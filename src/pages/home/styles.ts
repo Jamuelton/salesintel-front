@@ -297,3 +297,15 @@ export const InputAreaModal = styled.div`
   flex-direction: column;
   gap: 12px;
 `;
+
+export const LogoutArea = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  label {
+    cursor: pointer;
+    color: #ff0000;
+    font-weight: 700;
+  }
+`;

@@ -10,7 +10,13 @@ import * as S from "./styles";
 import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { RegisterSchema } from "../../services/types/signType";
+import { UserSchema } from "../../services/types/userType";
+import { PostUser } from "../../services/userServices";
+import { ZodError } from "zod";
+import {
+  successNotification,
+  warningNotification,
+} from "../../components/Notification";
 
 interface ErrorInterface {
   errorType: "" | "warning" | "error" | undefined;
@@ -31,7 +37,7 @@ export function SignUp() {
   const handleChangeEmail = (e: { target: { value: string } }) => {
     const { value } = e.target;
     try {
-      RegisterSchema.shape.email.parse(value);
+      UserSchema.shape.email.parse(value);
       setErrorEmail({ errorType: "", errorShow: false });
     } catch (error) {
       setErrorEmail({ errorType: "error", errorShow: true });
@@ -42,7 +48,7 @@ export function SignUp() {
   const handleChangeName = (e: { target: { value: string } }) => {
     const { value } = e.target;
     try {
-      RegisterSchema.shape.name.parse(value);
+      UserSchema.shape.company.parse(value);
       setErrorName({ errorType: "", errorShow: false });
     } catch (error) {
       setErrorName({ errorType: "error", errorShow: true });
@@ -53,7 +59,7 @@ export function SignUp() {
   const handleChangePassWord = (e: { target: { value: string } }) => {
     const { value } = e.target;
     try {
-      RegisterSchema.shape.password.parse(value);
+      UserSchema.shape.password.parse(value);
       setErrorPassword({ errorType: "", errorShow: false });
     } catch (error) {
       setErrorPassword({ errorType: "error", errorShow: true });
@@ -65,11 +71,23 @@ export function SignUp() {
     navigate("/login");
   };
 
-  const sign = () => {
-    console.log("Empresa: " + name);
-    console.log("Email: " + email);
-    console.log("Senha: " + passWord);
-    backLogin();
+  const sign = async () => {
+    try {
+      const signData = UserSchema.parse({
+        company: name,
+        email: email,
+        password: passWord,
+      });
+      const response = await PostUser(signData);
+      if (response?.status == 201) {
+        successNotification("Cadastro realizado");
+        backLogin();
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        warningNotification(error.issues[0].message);
+      }
+    }
   };
 
   return (

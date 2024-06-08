@@ -5,21 +5,25 @@ import { Button } from "../../components/Button";
 import Logo from "../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { LoginUser } from "../../services/userServices";
+import { UserInterface } from "../../services/types/userType";
+import Cookies from "js-cookie";
+import { useAuth } from "../../config/auth/UseAuth";
+import {
+  errorNotification,
+  successNotification,
+} from "../../components/Notification";
 
 export function Login() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState<string>();
-  const [passWord, setPassWord] = useState<string>();
+  const { auth, reloadPage } = useAuth();
+
+  const [email, setEmail] = useState<string>("");
+  const [passWord, setPassWord] = useState<string>("");
 
   const handleChangeEmail = (e: { target: { value: string } }) => {
     const { value } = e.target;
-    // try {
-    //   pregnantSchemaPartOne.shape.nome.parse(value);
-    //   setErrorName({ errorType: '', errorShow: false });
-    // } catch (error) {
-    //   setErrorName({ errorType: 'error', errorShow: true });
-    // }
     setEmail(value);
   };
 
@@ -37,10 +41,26 @@ export function Login() {
     navigate("/dashboard");
   };
 
-  const login = () => {
-    console.log("Email: " + email);
-    console.log("Senha: " + passWord);
-    sendHome();
+  const LoginData: UserInterface = {
+    email: email,
+    password: passWord,
+  };
+
+  const login = async () => {
+    const response = await LoginUser(LoginData);
+    if (response?.status == 200) {
+      const tokenDuration = new Date(Date.now() + 1000 * 60 * 60 * 40);
+      Cookies.set("token", response.data.token, {
+        expires: tokenDuration,
+      });
+      auth();
+      reloadPage();
+      successNotification("Usuário logado com sucesso");
+      sendHome();
+    }
+    if (response?.status == 403 || response?.status == 400) {
+      errorNotification("email e/ou senha incorretos");
+    }
   };
   return (
     <S.Container>
