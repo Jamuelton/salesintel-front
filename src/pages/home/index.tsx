@@ -3,6 +3,7 @@ import {
   Basket,
   DotsThreeOutline,
   PlusSquare,
+  Power,
   Receipt,
   UserCircle,
 } from "@phosphor-icons/react";
@@ -10,13 +11,16 @@ import { Button } from "../../components/Button";
 import * as S from "./styles";
 import { ProductList } from "../../components/productList";
 import { useState } from "react";
-import { CheckboxProps } from "antd";
+import { CheckboxProps, Popover } from "antd";
 import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../config/auth/UseAuth";
 
 export function Home() {
   const navigate = useNavigate();
+
+  const { logout, reloadPage } = useAuth();
 
   const PRODUCT_DATA_TEST = [
     {
@@ -92,6 +96,10 @@ export function Home() {
     setSamePrice(!samePrice);
   };
 
+  const sendToLogin = () => {
+    navigate("/login");
+  };
+
   const sendToProducts = () => {
     navigate("/products");
   };
@@ -100,13 +108,29 @@ export function Home() {
     navigate("/sales");
   };
 
+  const logouting = () => {
+    logout();
+    reloadPage();
+    alert("usuario deslogado");
+    sendToLogin();
+  };
+
   return (
     <S.Container>
       <S.Content>
         <S.Header>
           <div>
             <h2>Nome da Empresa</h2>
-            <UserCircle size={36} weight="fill" color="#244bc5" />
+            <Popover
+              content={
+                <S.LogoutArea onClick={logouting}>
+                  <label htmlFor="">Encerrar</label>
+                  <Power size={24} weight="regular" color="#ff0000" />
+                </S.LogoutArea>
+              }
+            >
+              <UserCircle size={36} weight="fill" color="#244bc5" />
+            </Popover>
           </div>
           <S.Line style={{ borderTop: "1px solid #244bc5" }} />
         </S.Header>
