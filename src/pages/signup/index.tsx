@@ -73,8 +73,9 @@ export function SignUp() {
   };
 
   const sign = async () => {
+    console.log(signData);
     const response = await PostUser(signData);
-    if (response?.status == 200) {
+    if (response?.status == 201) {
       alert("Cadastro realizado");
       backLogin();
     }
