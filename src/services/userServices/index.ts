@@ -23,3 +23,16 @@ export const LoginUser = async (data: UserInterface) => {
     }
   }
 };
+
+export const GetUserByEmail = async (token: string, email: string) => {
+  try {
+    const response = await api.get(`/user/email/${email}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response;
+    }
+  }
+};

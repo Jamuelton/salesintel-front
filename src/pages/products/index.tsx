@@ -11,6 +11,9 @@ import { DeleteModal } from "../../components/DeleteModal";
 import { GetProductsByUser } from "../../services/productServices";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
+import { GetUserByEmail } from "../../services/userServices";
+import { UserInterface } from "../../services/types/userType";
+import { warningNotification } from "../../components/Notification";
 
 interface TableData {
   key: string;
@@ -33,6 +36,7 @@ export function Products() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
   const [data, setData] = useState<TableData[]>([]);
+  const [userInfo, setUserInfo] = useState<UserInterface>();
 
   const token = Cookies.get("token") || "";
   const decoded = jwtDecode(token);
@@ -50,12 +54,25 @@ export function Products() {
             setData(response.data);
           }
         } catch (error) {
-          console.log("Deu erro");
+          warningNotification("Erro ao buscar produtos");
         }
       };
 
+      const getUserInfo = async () => {
+        try {
+          const response = await GetUserByEmail(token, email);
+          if (response?.status == 200) {
+            setUserInfo(response.data);
+          }
+        } catch (error) {
+          warningNotification("Erro ao resgatar usuário");
+        }
+      };
+
+      getUserInfo();
       getProducts();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns: ColumnsType<TableData> = [
@@ -252,7 +269,7 @@ export function Products() {
       <S.Content>
         <div>
           <h2>
-            <a onClick={() => sendHome()}>NOME DA EMPRESA</a>
+            <a onClick={() => sendHome()}>{userInfo?.company?.toUpperCase()}</a>
             {" > "} <span>PRODUTOS</span>
           </h2>
           <S.Line style={{ borderTop: "1px solid #244bc5" }} />
@@ -291,6 +308,7 @@ export function Products() {
       <AddProductModal
         open={isAddProductModalOpen}
         onCancel={closeAddProductModal}
+        userId={userInfo?.id || 0}
       />
       <AddItemsModal
         open={isAddItemsModalOpen}
