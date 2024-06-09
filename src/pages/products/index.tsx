@@ -4,18 +4,23 @@ import { Input } from "../../components/Input";
 import * as S from "./styles";
 import type { ColumnsType } from "antd/es/table";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddProductModal } from "../../components/AddProductModal";
 import { AddItemsModal } from "../../components/AddItemsModal";
 import { DeleteModal } from "../../components/DeleteModal";
+import { GetProductsByUser } from "../../services/productServices";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 
 interface TableData {
   key: string;
   id: string;
   name: string;
   category: string;
+  categoryId: number;
   quantity: string;
-  expirationDate: string;
+  expiration: string;
+  unit: string;
 }
 
 export function Products() {
@@ -27,6 +32,31 @@ export function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const [data, setData] = useState<TableData[]>([]);
+
+  const token = Cookies.get("token") || "";
+  const decoded = jwtDecode(token);
+  const email = decoded.sub || "";
+
+  useEffect(() => {
+    if (decoded != undefined) {
+      const getProducts = async () => {
+        try {
+          const response = await GetProductsByUser(
+            token != undefined ? token : "",
+            email
+          );
+          if (response?.status == 200) {
+            setData(response.data);
+          }
+        } catch (error) {
+          console.log("Deu erro");
+        }
+      };
+
+      getProducts();
+    }
+  }, []);
 
   const columns: ColumnsType<TableData> = [
     {
@@ -41,18 +71,24 @@ export function Products() {
     },
     {
       title: "CATEGORIA",
-      dataIndex: "category",
+      dataIndex: "categoryId",
       key: "category",
     },
     {
       title: "QNTD. TOTAL",
-      dataIndex: "quantity",
+      render: (record) => (
+        <>
+          {record.quantity}({record.unit})
+        </>
+      ),
       key: "quantity",
     },
     {
       title: "VENCIMENTO",
-      dataIndex: "expirationDate",
+      dataIndex: "expiration",
       key: "expirationDate",
+      render: (expiration: string) =>
+        new Date(expiration).toLocaleDateString("pt-BR"),
     },
     {
       align: "center",
@@ -116,96 +152,96 @@ export function Products() {
     navigate("/dashboard");
   };
 
-  const data: TableData[] = [
-    {
-      key: "1",
-      id: "1",
-      name: "Arroz Jurandir",
-      category: "Alimentos",
-      quantity: "350(UN)",
-      expirationDate: "10/07/2024",
-    },
-    {
-      key: "2",
-      id: "2",
-      name: "Feijão Carioca",
-      category: "Alimentos",
-      quantity: "200(UN)",
-      expirationDate: "15/08/2024",
-    },
-    {
-      key: "3",
-      id: "3",
-      name: "Macarrão Parafuso",
-      category: "Alimentos",
-      quantity: "150(UN)",
-      expirationDate: "20/09/2024",
-    },
-    {
-      key: "4",
-      id: "4",
-      name: "Óleo de Soja",
-      category: "Alimentos",
-      quantity: "100(UN)",
-      expirationDate: "01/12/2024",
-    },
-    {
-      key: "5",
-      id: "5",
-      name: "Açúcar Refinado",
-      category: "Alimentos",
-      quantity: "250(UN)",
-      expirationDate: "30/11/2024",
-    },
-    {
-      key: "6",
-      id: "6",
-      name: "Café em Pó",
-      category: "Alimentos",
-      quantity: "300(UN)",
-      expirationDate: "05/06/2024",
-    },
-    {
-      key: "7",
-      id: "7",
-      name: "Farinha de Trigo",
-      category: "Alimentos",
-      quantity: "180(UN)",
-      expirationDate: "10/10/2024",
-    },
-    {
-      key: "8",
-      id: "8",
-      name: "Leite Condensado",
-      category: "Alimentos",
-      quantity: "120(UN)",
-      expirationDate: "25/12/2024",
-    },
-    {
-      key: "9",
-      id: "9",
-      name: "Margarina",
-      category: "Alimentos",
-      quantity: "90(UN)",
-      expirationDate: "05/05/2024",
-    },
-    {
-      key: "10",
-      id: "10",
-      name: "Molho de Tomate",
-      category: "Alimentos",
-      quantity: "170(UN)",
-      expirationDate: "15/03/2024",
-    },
-    {
-      key: "11",
-      id: "11",
-      name: "Biscoito de Água e Sal",
-      category: "Alimentos",
-      quantity: "220(UN)",
-      expirationDate: "25/04/2024",
-    },
-  ];
+  // const data: TableData[] = [
+  //   {
+  //     key: "1",
+  //     id: "1",
+  //     name: "Arroz Jurandir",
+  //     category: "Alimentos",
+  //     quantity: "350(UN)",
+  //     expirationDate: "10/07/2024",
+  //   },
+  //   {
+  //     key: "2",
+  //     id: "2",
+  //     name: "Feijão Carioca",
+  //     category: "Alimentos",
+  //     quantity: "200(UN)",
+  //     expirationDate: "15/08/2024",
+  //   },
+  //   {
+  //     key: "3",
+  //     id: "3",
+  //     name: "Macarrão Parafuso",
+  //     category: "Alimentos",
+  //     quantity: "150(UN)",
+  //     expirationDate: "20/09/2024",
+  //   },
+  //   {
+  //     key: "4",
+  //     id: "4",
+  //     name: "Óleo de Soja",
+  //     category: "Alimentos",
+  //     quantity: "100(UN)",
+  //     expirationDate: "01/12/2024",
+  //   },
+  //   {
+  //     key: "5",
+  //     id: "5",
+  //     name: "Açúcar Refinado",
+  //     category: "Alimentos",
+  //     quantity: "250(UN)",
+  //     expirationDate: "30/11/2024",
+  //   },
+  //   {
+  //     key: "6",
+  //     id: "6",
+  //     name: "Café em Pó",
+  //     category: "Alimentos",
+  //     quantity: "300(UN)",
+  //     expirationDate: "05/06/2024",
+  //   },
+  //   {
+  //     key: "7",
+  //     id: "7",
+  //     name: "Farinha de Trigo",
+  //     category: "Alimentos",
+  //     quantity: "180(UN)",
+  //     expirationDate: "10/10/2024",
+  //   },
+  //   {
+  //     key: "8",
+  //     id: "8",
+  //     name: "Leite Condensado",
+  //     category: "Alimentos",
+  //     quantity: "120(UN)",
+  //     expirationDate: "25/12/2024",
+  //   },
+  //   {
+  //     key: "9",
+  //     id: "9",
+  //     name: "Margarina",
+  //     category: "Alimentos",
+  //     quantity: "90(UN)",
+  //     expirationDate: "05/05/2024",
+  //   },
+  //   {
+  //     key: "10",
+  //     id: "10",
+  //     name: "Molho de Tomate",
+  //     category: "Alimentos",
+  //     quantity: "170(UN)",
+  //     expirationDate: "15/03/2024",
+  //   },
+  //   {
+  //     key: "11",
+  //     id: "11",
+  //     name: "Biscoito de Água e Sal",
+  //     category: "Alimentos",
+  //     quantity: "220(UN)",
+  //     expirationDate: "25/04/2024",
+  //   },
+  // ];
 
   const dataFiltered = data.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
