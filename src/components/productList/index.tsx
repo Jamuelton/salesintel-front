@@ -1,16 +1,18 @@
-import { PencilSimple, Eye } from "@phosphor-icons/react";
+import { Eye } from "@phosphor-icons/react";
 import * as S from "./styles";
 
 interface ProductListInterface {
   name?: string;
   price?: string;
   quantity?: string;
+  openModal?: () => void;
 }
 
 export const ProductList: React.FC<ProductListInterface> = ({
   name,
   price,
   quantity,
+  openModal,
 }) => {
   const truncateText = (text: string | undefined, maxLength: number) => {
     return text && text.length > maxLength
@@ -27,8 +29,7 @@ export const ProductList: React.FC<ProductListInterface> = ({
         <label htmlFor="">{quantity}</label>
       </S.LabelArea>
       <S.IconArea>
-        <PencilSimple size={24} />
-        <Eye size={24} />
+        <Eye size={24} onClick={openModal} />
       </S.IconArea>
     </S.Container>
   );

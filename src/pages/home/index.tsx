@@ -17,30 +17,60 @@ import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
 import { warningNotification } from "../../components/Notification";
-import { GetUserProduct } from "../../services/userServices";
+import { GetUserByEmail } from "../../services/userServices";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import { AddProductInterface } from "../../services/types/addProductType";
+import {
+  GetProductById,
+  GetProductsByUser,
+} from "../../services/productServices";
+import { UserInterface } from "../../services/types/userType";
 
 export function Home() {
   const navigate = useNavigate();
 
   const token = Cookies.get("token") || "";
+  const decoded = jwtDecode(token);
+  const email = decoded.sub || "";
 
   const { logout, reloadPage } = useAuth();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
   const [samePrice, setSamePrice] = useState<boolean>(true);
   const [productInfo, setProductInfo] = useState<Array<AddProductInterface>>();
+  const [product, setProduct] = useState<AddProductInterface>();
+  const [userInfo, setUserInfo] = useState<UserInterface>();
 
   useEffect(() => {
-    const getUserProducts = async () => {
-      const response = await GetUserProduct(52, token);
-      if (response?.status == 200) {
-        setProductInfo(response.data);
-      }
-    };
-    getUserProducts();
-  }, [token]);
+    if (decoded != undefined) {
+      const getProducts = async () => {
+        try {
+          const response = await GetProductsByUser(token, email);
+          if (response?.status == 200) {
+            setProductInfo(response.data);
+          }
+        } catch (error) {
+          warningNotification("Erro ao buscar produtos");
+        }
+      };
+
+      const getUserInfo = async () => {
+        try {
+          const response = await GetUserByEmail(token, email);
+          if (response?.status == 200) {
+            setUserInfo(response.data);
+          }
+        } catch (error) {
+          warningNotification("Erro ao resgatar usuário");
+        }
+      };
+      getUserInfo();
+      getProducts();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const itemsToShow = productInfo && productInfo.slice(0, 6);
 
@@ -54,6 +84,33 @@ export function Home() {
 
   const handleCancel = () => {
     setIsModalOpen(false);
+  };
+
+  const getProductById = async (id: string) => {
+    try {
+      const response = await GetProductById(
+        token != undefined ? token : "",
+        String(id)
+      );
+      if (response?.status == 200) {
+        setProduct(response.data);
+      }
+    } catch (error) {
+      warningNotification("Erro ao buscar produtos");
+    }
+  };
+
+  const showProductModal = (id?: number) => {
+    setIsProductModalOpen(true);
+    id && getProductById(id.toString());
+  };
+
+  const handleProductOk = () => {
+    setIsProductModalOpen(false);
+  };
+
+  const handleProductCancel = () => {
+    setIsProductModalOpen(false);
   };
 
   const onChange: CheckboxProps["onChange"] = () => {
@@ -84,7 +141,7 @@ export function Home() {
       <S.Content>
         <S.Header>
           <div>
-            <h2>Nome da Empresa</h2>
+            <h2>{userInfo?.company}</h2>
             <Popover
               content={
                 <S.LogoutArea onClick={logouting}>
@@ -110,15 +167,19 @@ export function Home() {
               />
             </S.ProductAreaTitle>
             <S.ProductAreaList>
-              {itemsToShow &&
+              {itemsToShow && itemsToShow.length > 0 ? (
                 itemsToShow.map((item, index) => (
                   <ProductList
                     key={index}
                     name={item.name}
                     price={item.salePrice.toString()}
                     quantity={item.quantity.toString()}
+                    openModal={() => showProductModal(item.id)}
                   />
-                ))}
+                ))
+              ) : (
+                <p>Sem produtos cadastrados</p>
+              )}
               {productInfo && productInfo.length > 5 && (
                 <S.ProductDots>
                   <DotsThreeOutline size={32} weight="fill" />
@@ -201,6 +262,51 @@ export function Home() {
           )}
         </section>
       </S.RegisterSellModal>
+      <S.ProductModal
+        title={product?.name}
+        open={isProductModalOpen}
+        onOk={handleProductOk}
+        onCancel={handleProductCancel}
+        okText={"Fechar"}
+      >
+        <section>
+          <div>
+            <S.HeavyText>Preço de compra:</S.HeavyText>
+            <S.LightText>{product?.purchasePrice}</S.LightText>
+          </div>
+          <div>
+            <S.HeavyText>Preço de venda:</S.HeavyText>
+            <S.LightText>{product?.salePrice}</S.LightText>
+          </div>
+
+          <div>
+            <S.HeavyText>Quantidade:</S.HeavyText>
+            <S.LightText>{product?.quantity}</S.LightText>
+          </div>
+
+          <div>
+            <S.HeavyText>Tipo:</S.HeavyText>
+            <S.LightText>{product?.unit}</S.LightText>
+          </div>
+
+          <div>
+            <S.HeavyText>Data de vencimento:</S.HeavyText>
+            <S.LightText>{product?.expiration}</S.LightText>
+          </div>
+
+          <div>
+            <S.HeavyText>Produtos vendidos:</S.HeavyText>
+            <S.LightText>{}</S.LightText>
+          </div>
+
+          <div>
+            <S.HeavyText>Lucro:</S.HeavyText>
+            <S.LightText>
+              {product && product?.salePrice - product?.purchasePrice}
+            </S.LightText>
+          </div>
+        </section>
+      </S.ProductModal>
     </S.Container>
   );
 }

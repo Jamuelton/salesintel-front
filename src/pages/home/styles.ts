@@ -309,3 +309,20 @@ export const LogoutArea = styled.span`
     font-weight: 700;
   }
 `;
+
+export const ProductModal = styled(Modal)`
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    div {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .ant-btn-default {
+    display: none;
+  }
+`;
