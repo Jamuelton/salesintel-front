@@ -1,12 +1,16 @@
 import { z } from "zod";
 
 export interface AddProductInterface {
+  id?: number;
   name?: string;
-  quantity: number;
-  lote: string;
   purchasePrice: number;
   salePrice: number;
-  expirationDate: Date;
+  quantity: number;
+  unit: string;
+  expiration: string;
+  batch: number;
+  categoryId: number;
+  userId: number;
 }
 
 const currentDate = new Date();

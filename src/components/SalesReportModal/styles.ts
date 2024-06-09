@@ -22,4 +22,10 @@ export const Row = styled.section`
   display: flex;
   flex-direction: row;
   gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
 `;

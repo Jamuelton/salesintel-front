@@ -29,6 +29,10 @@ export const Content = styled.section`
   width: 80%;
   height: 100%;
   padding: 1rem;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const Line = styled(Divider)`
@@ -40,6 +44,12 @@ export const Line = styled(Divider)`
 export const SearchButtonContainer = styled.section`
   display: flex;
   justify-content: space-between;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 1rem;
+  }
 `;
 
 export const AddButton = styled.div`

@@ -2,12 +2,21 @@ import * as S from "./styles";
 import { Modal } from "../../components/Modal";
 import { Input } from "../Input";
 import { Button } from "../Button";
-import { useState } from "react";
-import { AddProductSchema } from "../../services/types/addProductType";
+import { useEffect, useState } from "react";
+import {
+  AddProductInterface,
+  AddProductSchema,
+} from "../../services/types/addProductType";
+import { PostProduct } from "../../services/productServices";
+import Cookies from "js-cookie";
+import { successNotification, warningNotification } from "../Notification";
+import { GetCategories } from "../../services/categoryServices";
+import { CategoryInterface } from "../../services/types/categoryType";
 
 interface AddProductModalInterface {
   open?: boolean;
   onCancel?: () => void;
+  userId: number;
 }
 
 interface ErrorInterface {
@@ -18,6 +27,7 @@ interface ErrorInterface {
 export const AddProductModal: React.FC<AddProductModalInterface> = ({
   open,
   onCancel,
+  userId,
 }) => {
   const [name, setName] = useState<string>();
   const [expirationDate, setExpirationDate] = useState<string>();
@@ -27,6 +37,7 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
   const [quantity, setQuantity] = useState<number>();
   const [purschasePrice, setPurchasePrice] = useState<number>();
   const [salePrice, setSalePrice] = useState<number>();
+  const [categoryData, setCategoryData] = useState<CategoryInterface[]>();
 
   const [errorName, setErrorName] = useState<ErrorInterface>();
   const [errorexpirationDate, setErrorExpirationDate] =
@@ -35,6 +46,8 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
   const [errorPurchasePrice, setErrorPurchasePrice] =
     useState<ErrorInterface>();
   const [errorSalePrice, setErrorSalePrice] = useState<ErrorInterface>();
+
+  const token = Cookies.get("token") || "";
 
   const options = [
     { value: "other", label: "Outros" },
@@ -58,6 +71,21 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
     { value: "alqueire", label: "Alqueire" },
     { value: "arroba", label: "Arroba" },
   ];
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await GetCategories(token);
+        if (response?.status == 200) {
+          setCategoryData(response.data);
+        }
+      } catch (error) {
+        warningNotification("Erro ao resgatar categorias");
+      }
+    };
+
+    getCategories();
+  }, [token]);
 
   const handleChangeName = (e: { target: { value: string } }) => {
     const { value } = e.target;
@@ -127,25 +155,29 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
     setCategory(String(value));
   };
 
-  const submit = () => {
-    const json = {
-      name: name,
-      expirationDate: expirationDate,
-      unit: unit,
-      category: category,
-      lote: lote,
-      quantity: quantity,
-      purschasePrice: purschasePrice,
-      salePrice: salePrice,
-    };
-
-    console.log(json);
-
-    if (onCancel != undefined) {
-      onCancel();
+  const submit = async () => {
+    try {
+      const productData: AddProductInterface = {
+        batch: Number(lote),
+        categoryId: Number(category),
+        expiration: expirationDate || "",
+        purchasePrice: Number(purschasePrice),
+        quantity: Number(quantity),
+        salePrice: Number(salePrice),
+        unit: unit || "",
+        userId: userId,
+        name: name,
+      };
+      const response = await PostProduct(productData, token);
+      if (response?.status == 201) {
+        successNotification("Produto adicionado");
+        if (onCancel != undefined) {
+          onCancel();
+        }
+      }
+    } catch (error) {
+      warningNotification("Ocorreu um erro!");
     }
-
-    console.log("ADICIONADO COM SUCESSO");
   };
 
   return (
@@ -203,20 +235,14 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
           <S.CustomSelect
             placeholder="CATEGORIA"
             showSearch
-            options={[
-              {
-                value: "alimentos",
-                label: "Alimentos",
-              },
-              {
-                value: "limpeza",
-                label: "Produtos de Limpeza",
-              },
-              {
-                value: "higiene",
-                label: "Produtos de Higiene",
-              },
-            ]}
+            options={
+              categoryData != undefined
+                ? categoryData.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                  }))
+                : []
+            }
             onChange={handleChangeCategory}
           />
         </S.InputContainer>

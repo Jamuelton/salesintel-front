@@ -36,3 +36,16 @@ export const GetUserProduct = async (id: number, token: string) => {
     }
   }
 };
+
+export const GetUserByEmail = async (token: string, email: string) => {
+  try {
+    const response = await api.get(`/user/email/${email}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response;
+    }
+  }
+};

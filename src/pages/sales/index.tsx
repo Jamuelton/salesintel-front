@@ -239,6 +239,7 @@ export function Sales() {
             dataSource={dataFiltered}
             pagination={{ pageSize: 9 }}
             locale={{ emptyText: "Nenhuma venda encontrada" }}
+            scroll={{ x: true }}
           />
         </S.TableContainer>
         <DeleteModal
