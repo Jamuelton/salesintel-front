@@ -2,9 +2,9 @@ import { PencilSimple, Eye } from "@phosphor-icons/react";
 import * as S from "./styles";
 
 interface ProductListInterface {
-  name: string;
-  price: string;
-  quantity: string;
+  name?: string;
+  price?: string;
+  quantity?: string;
 }
 
 export const ProductList: React.FC<ProductListInterface> = ({

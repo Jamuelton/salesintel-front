@@ -10,76 +10,39 @@ import {
 import { Button } from "../../components/Button";
 import * as S from "./styles";
 import { ProductList } from "../../components/productList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CheckboxProps, Popover } from "antd";
 import { Input } from "../../components/Input";
 import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
 import { warningNotification } from "../../components/Notification";
+import { GetUserProduct } from "../../services/userServices";
+import Cookies from "js-cookie";
+import { AddProductInterface } from "../../services/types/addProductType";
 
 export function Home() {
   const navigate = useNavigate();
 
+  const token = Cookies.get("token") || "";
+
   const { logout, reloadPage } = useAuth();
-
-  const PRODUCT_DATA_TEST = [
-    {
-      name: "transmissao",
-      price: "2000,00",
-      quantity: "17",
-    },
-    {
-      name: "motor",
-      price: "5000,00",
-      quantity: "05",
-    },
-    {
-      name: "freio",
-      price: "300,00",
-      quantity: "50",
-    },
-    {
-      name: "bateria",
-      price: "600,00",
-      quantity: "20",
-    },
-    {
-      name: "embreagem",
-      price: "700,00",
-      quantity: "15",
-    },
-    {
-      name: "radiador",
-      price: "400,00",
-      quantity: "10",
-    },
-    {
-      name: "amortecedor",
-      price: "250,00",
-      quantity: "30",
-    },
-    {
-      name: "filtro de ar",
-      price: "50,00",
-      quantity: "100",
-    },
-    {
-      name: "velas de ignição",
-      price: "25,00",
-      quantity: "200",
-    },
-    {
-      name: "pneus",
-      price: "400,00",
-      quantity: "40",
-    },
-  ];
-
-  const itemsToShow = PRODUCT_DATA_TEST.slice(0, 7);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [samePrice, setSamePrice] = useState<boolean>(true);
+  const [productInfo, setProductInfo] = useState<Array<AddProductInterface>>();
+
+  useEffect(() => {
+    const getUserProducts = async () => {
+      const response = await GetUserProduct(52, token);
+      if (response?.status == 200) {
+        setProductInfo(response.data);
+      }
+    };
+    getUserProducts();
+  }, [token]);
+
+  const itemsToShow = productInfo && productInfo.slice(0, 6);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -147,15 +110,16 @@ export function Home() {
               />
             </S.ProductAreaTitle>
             <S.ProductAreaList>
-              {itemsToShow.map((item, index) => (
-                <ProductList
-                  key={index}
-                  name={item.name}
-                  price={item.price}
-                  quantity={item.quantity}
-                />
-              ))}
-              {PRODUCT_DATA_TEST.length > 7 && (
+              {itemsToShow &&
+                itemsToShow.map((item, index) => (
+                  <ProductList
+                    key={index}
+                    name={item.name}
+                    price={item.salePrice.toString()}
+                    quantity={item.quantity.toString()}
+                  />
+                ))}
+              {productInfo && productInfo.length > 5 && (
                 <S.ProductDots>
                   <DotsThreeOutline size={32} weight="fill" />
                 </S.ProductDots>

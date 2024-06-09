@@ -23,3 +23,16 @@ export const LoginUser = async (data: UserInterface) => {
     }
   }
 };
+
+export const GetUserProduct = async (id: number, token: string) => {
+  try {
+    const response = await api.get(`/products/user/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response;
+    }
+  }
+};
