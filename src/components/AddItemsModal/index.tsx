@@ -4,12 +4,15 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { useState } from "react";
 import { AddItemsSchema } from "../../services/types/addItemsType";
+import { AddProductInterface } from "../../services/types/addProductType";
+import { UpdateProduct } from "../../services/productServices";
+import Cookies from "js-cookie";
+import { successNotification, warningNotification } from "../Notification";
 
 interface AddItemsModalInterface {
   open?: boolean;
   onCancel?: () => void;
-  id?: number;
-  productName?: string;
+  product: AddProductInterface;
 }
 
 interface ErrorInterface {
@@ -20,12 +23,13 @@ interface ErrorInterface {
 export const AddItemsModal: React.FC<AddItemsModalInterface> = ({
   open,
   onCancel,
-  id,
-  productName,
+  product,
 }) => {
-  const [quantity, setQuantity] = useState<number>();
+  const [quantity, setQuantity] = useState<number>(0);
 
   const [errorquantity, setErrorQuantity] = useState<ErrorInterface>();
+
+  const token = Cookies.get("token") || "";
 
   const handleChangeQuantity = (e: { target: { value: string } }) => {
     const { value } = e.target;
@@ -38,25 +42,45 @@ export const AddItemsModal: React.FC<AddItemsModalInterface> = ({
     setQuantity(Number(value));
   };
 
+  const productData: AddProductInterface = {
+    name: product.name,
+    purchasePrice: product.purchasePrice,
+    salePrice: product.salePrice,
+    quantity: product.quantity + quantity,
+    unit: product.unit,
+    expiration: product.expiration,
+    batch: product.batch,
+    categoryId: product.categoryId,
+    userId: product.userId,
+  };
+
+  const updateProduct = async (id: number) => {
+    try {
+      const response = await UpdateProduct(
+        productData,
+        token != undefined ? token : "",
+        String(id)
+      );
+      if (response?.status == 200) {
+        successNotification("Adicionado com sucesso");
+        if (onCancel != undefined) {
+          onCancel();
+        }
+      }
+    } catch (error) {
+      warningNotification("Erro ao adicionar produto");
+    }
+  };
+
   const submit = () => {
     if (quantity == undefined) {
       setErrorQuantity({ errorType: "error", errorShow: true });
     }
 
     if (errorquantity?.errorShow != true && quantity != 0) {
-      const json = {
-        quantity: quantity,
-      };
-
-      console.log(json);
-
-      if (onCancel != undefined) {
-        onCancel();
-      }
-
-      console.log("ADICIONADO COM SUCESSO");
+      updateProduct(product.id != undefined ? product.id : 0);
     } else {
-      console.log("Tá com erro");
+      warningNotification("Insira caracteres válidos");
     }
   };
 
@@ -64,7 +88,7 @@ export const AddItemsModal: React.FC<AddItemsModalInterface> = ({
     <Modal
       open={open}
       onCancel={onCancel}
-      headerText={`PRODUTO ${id}`}
+      headerText={`ADICIONAR PRODUTO ${product.id}`}
       footer={[
         <Button
           label="ADICIONAR"
@@ -82,7 +106,7 @@ export const AddItemsModal: React.FC<AddItemsModalInterface> = ({
             placeholder="NOME DO PRODUTO"
             color="#244bc5"
             disabled
-            value={productName}
+            value={product.name}
           />
         </S.InputContainer>
         <S.InputContainer>

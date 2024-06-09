@@ -8,12 +8,16 @@ import { useEffect, useState } from "react";
 import { AddProductModal } from "../../components/AddProductModal";
 import { AddItemsModal } from "../../components/AddItemsModal";
 import { DeleteModal } from "../../components/DeleteModal";
-import { GetProductsByUser } from "../../services/productServices";
+import {
+  GetProductById,
+  GetProductsByUser,
+} from "../../services/productServices";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 import { GetUserByEmail } from "../../services/userServices";
 import { UserInterface } from "../../services/types/userType";
 import { warningNotification } from "../../components/Notification";
+import { AddProductInterface } from "../../services/types/addProductType";
 
 interface TableData {
   key: string;
@@ -30,17 +34,41 @@ export function Products() {
   const navigate = useNavigate();
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
-  const [addItemsId, setAddItemsId] = useState(0);
-  const [addItemsName, setAddItemsName] = useState("");
+  // const [addItemsId, setAddItemsId] = useState(0);
+  // const [addItemsName, setAddItemsName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
   const [data, setData] = useState<TableData[]>([]);
   const [userInfo, setUserInfo] = useState<UserInterface>();
+  const [addItemsProduct, setAddItemsProduct] = useState<AddProductInterface>({
+    batch: 0,
+    categoryId: 0,
+    expiration: "",
+    purchasePrice: 0,
+    quantity: 0,
+    salePrice: 0,
+    unit: "",
+    userId: 0,
+  });
 
   const token = Cookies.get("token") || "";
   const decoded = jwtDecode(token);
   const email = decoded.sub || "";
+
+  const getProduct = async (id: number) => {
+    try {
+      const response = await GetProductById(
+        token != undefined ? token : "",
+        String(id)
+      );
+      if (response?.status == 200) {
+        setAddItemsProduct(response.data);
+      }
+    } catch (error) {
+      warningNotification("Erro ao buscar produtos");
+    }
+  };
 
   useEffect(() => {
     if (decoded != undefined) {
@@ -115,7 +143,7 @@ export function Products() {
             size={24}
             weight="bold"
             color="#244BC5"
-            onClick={() => addItems(record.id, record.name)}
+            onClick={() => addItems(record.id)}
             cursor={"pointer"}
             alt="Adicionar itens"
           />
@@ -132,9 +160,8 @@ export function Products() {
     },
   ];
 
-  const addItems = (id: number, name: string) => {
-    setAddItemsId(id);
-    setAddItemsName(name);
+  const addItems = (id: number) => {
+    getProduct(id);
     setIsAddItemsModalOpen(true);
   };
 
@@ -168,97 +195,6 @@ export function Products() {
   const sendHome = () => {
     navigate("/dashboard");
   };
-
-  // const data: TableData[] = [
-  //   {
-  //     key: "1",
-  //     id: "1",
-  //     name: "Arroz Jurandir",
-  //     category: "Alimentos",
-  //     quantity: "350(UN)",
-  //     expirationDate: "10/07/2024",
-  //   },
-  //   {
-  //     key: "2",
-  //     id: "2",
-  //     name: "Feijão Carioca",
-  //     category: "Alimentos",
-  //     quantity: "200(UN)",
-  //     expirationDate: "15/08/2024",
-  //   },
-  //   {
-  //     key: "3",
-  //     id: "3",
-  //     name: "Macarrão Parafuso",
-  //     category: "Alimentos",
-  //     quantity: "150(UN)",
-  //     expirationDate: "20/09/2024",
-  //   },
-  //   {
-  //     key: "4",
-  //     id: "4",
-  //     name: "Óleo de Soja",
-  //     category: "Alimentos",
-  //     quantity: "100(UN)",
-  //     expirationDate: "01/12/2024",
-  //   },
-  //   {
-  //     key: "5",
-  //     id: "5",
-  //     name: "Açúcar Refinado",
-  //     category: "Alimentos",
-  //     quantity: "250(UN)",
-  //     expirationDate: "30/11/2024",
-  //   },
-  //   {
-  //     key: "6",
-  //     id: "6",
-  //     name: "Café em Pó",
-  //     category: "Alimentos",
-  //     quantity: "300(UN)",
-  //     expirationDate: "05/06/2024",
-  //   },
-  //   {
-  //     key: "7",
-  //     id: "7",
-  //     name: "Farinha de Trigo",
-  //     category: "Alimentos",
-  //     quantity: "180(UN)",
-  //     expirationDate: "10/10/2024",
-  //   },
-  //   {
-  //     key: "8",
-  //     id: "8",
-  //     name: "Leite Condensado",
-  //     category: "Alimentos",
-  //     quantity: "120(UN)",
-  //     expirationDate: "25/12/2024",
-  //   },
-  //   {
-  //     key: "9",
-  //     id: "9",
-  //     name: "Margarina",
-  //     category: "Alimentos",
-  //     quantity: "90(UN)",
-  //     expirationDate: "05/05/2024",
-  //   },
-  //   {
-  //     key: "10",
-  //     id: "10",
-  //     name: "Molho de Tomate",
-  //     category: "Alimentos",
-  //     quantity: "170(UN)",
-  //     expirationDate: "15/03/2024",
-  //   },
-  //   {
-  //     key: "11",
-  //     id: "11",
-  //     name: "Biscoito de Água e Sal",
-  //     category: "Alimentos",
-  //     quantity: "220(UN)",
-  //     expirationDate: "25/04/2024",
-  //   },
-  // ];
 
   const dataFiltered = data.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -313,8 +249,7 @@ export function Products() {
       <AddItemsModal
         open={isAddItemsModalOpen}
         onCancel={closeAddItemsModal}
-        id={addItemsId}
-        productName={addItemsName}
+        product={addItemsProduct}
       />
       <DeleteModal
         open={isDeleteModalOpen}

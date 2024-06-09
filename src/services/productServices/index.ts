@@ -27,3 +27,33 @@ export const PostProduct = async (data: AddProductInterface, token: string) => {
     }
   }
 };
+
+export const GetProductById = async (token: string, id: string) => {
+  try {
+    const response = await api.get(`/products/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response;
+    }
+  }
+};
+
+export const UpdateProduct = async (
+  data: AddProductInterface,
+  token: string,
+  id: string
+) => {
+  try {
+    const response = await api.put(`/products/${id}`, data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response;
+    }
+  }
+};
