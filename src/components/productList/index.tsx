@@ -12,10 +12,17 @@ export const ProductList: React.FC<ProductListInterface> = ({
   price,
   quantity,
 }) => {
+  const truncateText = (text: string | undefined, maxLength: number) => {
+    return text && text.length > maxLength
+      ? text.slice(0, maxLength) + "..."
+      : text;
+  };
+
+  const truncatedName = truncateText(name, 12);
   return (
     <S.Container>
       <S.LabelArea>
-        <label htmlFor="">{name}</label>
+        <label htmlFor="">{truncatedName}</label>
         <label htmlFor="">R$ {price}</label>
         <label htmlFor="">{quantity}</label>
       </S.LabelArea>
