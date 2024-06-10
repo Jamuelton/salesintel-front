@@ -1,20 +1,44 @@
 import * as S from "./styles";
 import { Modal } from "../../components/Modal";
 import { Button } from "../Button";
+import { DeleteProduct } from "../../services/productServices";
+import Cookies from "js-cookie";
+import { successNotification, warningNotification } from "../Notification";
 
 interface DeleteModalInterface {
   open?: boolean;
   onCancel?: () => void;
-  id?: number;
+  deleteFunction?: () => void | undefined;
   headerText?: string;
+  id: number;
 }
 
 export const DeleteModal: React.FC<DeleteModalInterface> = ({
   open,
   onCancel,
-  id,
   headerText,
+  id,
 }) => {
+  const token = Cookies.get("token") || "";
+
+  const deleteProduct = async (id: number) => {
+    console.log(id);
+    try {
+      const response = await DeleteProduct(
+        token != undefined ? token : "",
+        String(id)
+      );
+      if (response?.status == 204) {
+        successNotification("Deletado com sucesso");
+        if (onCancel != undefined) {
+          onCancel();
+        }
+      }
+    } catch (error) {
+      warningNotification("Erro ao deletar produto");
+    }
+  };
+
   return (
     <Modal
       open={open}
@@ -34,7 +58,7 @@ export const DeleteModal: React.FC<DeleteModalInterface> = ({
             shape="round"
             color="#f5f6fa"
             secondColor="#C52D24"
-            buttonFunction={() => console.log("Adicionado")}
+            buttonFunction={() => deleteProduct(id)}
           />
         </S.ModalButtonRow>,
       ]}

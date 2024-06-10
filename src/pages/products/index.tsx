@@ -34,8 +34,6 @@ export function Products() {
   const navigate = useNavigate();
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
-  // const [addItemsId, setAddItemsId] = useState(0);
-  // const [addItemsName, setAddItemsName] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
@@ -70,22 +68,22 @@ export function Products() {
     }
   };
 
+  const getProducts = async () => {
+    try {
+      const response = await GetProductsByUser(
+        token != undefined ? token : "",
+        email
+      );
+      if (response?.status == 200) {
+        setData(response.data);
+      }
+    } catch (error) {
+      warningNotification("Erro ao buscar produtos");
+    }
+  };
+
   useEffect(() => {
     if (decoded != undefined) {
-      const getProducts = async () => {
-        try {
-          const response = await GetProductsByUser(
-            token != undefined ? token : "",
-            email
-          );
-          if (response?.status == 200) {
-            setData(response.data);
-          }
-        } catch (error) {
-          warningNotification("Erro ao buscar produtos");
-        }
-      };
-
       const getUserInfo = async () => {
         try {
           const response = await GetUserByEmail(token, email);
@@ -181,14 +179,17 @@ export function Products() {
   };
 
   const closeAddProductModal = () => {
+    getProducts();
     setIsAddProductModalOpen(false);
   };
 
   const closeAddItemsModal = () => {
+    getProducts();
     setIsAddItemsModalOpen(false);
   };
 
   const closeDeleteModal = () => {
+    getProducts();
     setIsDeleteModalOpen(false);
   };
 
@@ -254,8 +255,8 @@ export function Products() {
       <DeleteModal
         open={isDeleteModalOpen}
         onCancel={closeDeleteModal}
-        id={deleteId}
         headerText={`DELETAR PRODUTO ${deleteId}`}
+        id={deleteId}
       />
     </S.Container>
   );
