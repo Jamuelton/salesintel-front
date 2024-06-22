@@ -2,9 +2,9 @@ import { AxiosError } from "axios";
 import { api } from "../api";
 import { AddProductInterface } from "../types/addProductType";
 
-export const GetProductsByUser = async (token: string, email: string) => {
+export const GetProductsByUser = async (token: string) => {
   try {
-    const response = await api.get(`/products/user/${email}`, {
+    const response = await api.get(`/products/token`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response;

@@ -47,7 +47,7 @@ export function Home() {
     if (decoded != undefined) {
       const getProducts = async () => {
         try {
-          const response = await GetProductsByUser(token, email);
+          const response = await GetProductsByUser(token);
           if (response?.status == 200) {
             setProductInfo(response.data);
           }
