@@ -11,8 +11,8 @@ import { Button } from "../../components/Button";
 import * as S from "./styles";
 import { ProductList } from "../../components/productList";
 import { useEffect, useState } from "react";
-import { CheckboxProps, Popover } from "antd";
-import { Input } from "../../components/Input";
+import { Popover } from "antd";
+
 import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
@@ -27,6 +27,11 @@ import {
 } from "../../services/productServices";
 import { UserInterface } from "../../services/types/userType";
 
+interface ListProps {
+  value?: string;
+  label: string;
+}
+
 export function Home() {
   const navigate = useNavigate();
 
@@ -38,10 +43,10 @@ export function Home() {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isProductModalOpen, setIsProductModalOpen] = useState<boolean>(false);
-  const [samePrice, setSamePrice] = useState<boolean>(true);
   const [productInfo, setProductInfo] = useState<Array<AddProductInterface>>();
   const [product, setProduct] = useState<AddProductInterface>();
   const [userInfo, setUserInfo] = useState<UserInterface>();
+  const [listProps, setListProps] = useState<Array<ListProps>>([]);
 
   useEffect(() => {
     if (decoded != undefined) {
@@ -50,6 +55,16 @@ export function Home() {
           const response = await GetProductsByUser(token);
           if (response?.status == 200) {
             setProductInfo(response.data);
+            if (response.data.length > 0) {
+              const newListProps = response.data.map(
+                (product: AddProductInterface) => ({
+                  value: product.id,
+                  label: product.name,
+                })
+              );
+
+              setListProps(newListProps);
+            }
           }
         } catch (error) {
           warningNotification("Erro ao buscar produtos");
@@ -100,6 +115,12 @@ export function Home() {
     }
   };
 
+  const heandleChangeProduct = (value: unknown) => {
+    if (typeof value === "number") {
+      getProductById(value.toString());
+    }
+  };
+
   const showProductModal = (id?: number) => {
     setIsProductModalOpen(true);
     id && getProductById(id.toString());
@@ -111,10 +132,6 @@ export function Home() {
 
   const handleProductCancel = () => {
     setIsProductModalOpen(false);
-  };
-
-  const onChange: CheckboxProps["onChange"] = () => {
-    setSamePrice(!samePrice);
   };
 
   const sendToLogin = () => {
@@ -233,33 +250,25 @@ export function Home() {
         <section>
           <S.SelectAreaModal>
             <S.LightText>Produto:</S.LightText>
-            <Select defaut="Selecione" />
+            <Select
+              defaut="Selecione"
+              list={listProps}
+              selectFunc={heandleChangeProduct}
+            />
           </S.SelectAreaModal>
           <S.PriceAreaModal>
             <div>
               <S.LightText>Preço de venda:</S.LightText>
-              <S.HeavyText>R$ 30,00</S.HeavyText>
+              <S.HeavyText>R$ {product?.salePrice}</S.HeavyText>
             </div>
             <div>
               <S.LightText>Unidade:</S.LightText>
-              <S.HeavyText>KG</S.HeavyText>
+              <S.HeavyText>{product?.unit}</S.HeavyText>
             </div>
           </S.PriceAreaModal>
-          <S.SelectAreaModal>
-            <S.LightText>Categoria da venda:</S.LightText>
-            <Select defaut="Selecione" />
-          </S.SelectAreaModal>
-          <div>
-            <S.BoxPrice onChange={onChange}>
-              vender pelo mesmo valor cadastrado
-            </S.BoxPrice>
-          </div>
-          {samePrice && (
-            <S.InputAreaModal>
-              <S.LightText>Valor da venda(UN):</S.LightText>
-              <Input leftIcon={"R$"} placeholder="00,00" color="#244bc5" />
-            </S.InputAreaModal>
-          )}
+          <S.QuantityAreaModal>
+            <S.LightText>Quantidade:</S.LightText>
+          </S.QuantityAreaModal>
         </section>
       </S.RegisterSellModal>
       <S.ProductModal

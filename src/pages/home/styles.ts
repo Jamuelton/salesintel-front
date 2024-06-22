@@ -1,4 +1,4 @@
-import { Checkbox, Divider, Modal } from "antd";
+import { Divider, Modal } from "antd";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -268,7 +268,7 @@ export const HeavyText = styled.label`
 
 export const PriceAreaModal = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
   gap: 1rem;
 
@@ -276,12 +276,6 @@ export const PriceAreaModal = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-  }
-`;
-
-export const BoxPrice = styled(Checkbox)`
-  span {
-    color: var(--blue-primary);
   }
 `;
 
@@ -297,6 +291,8 @@ export const InputAreaModal = styled.div`
   flex-direction: column;
   gap: 12px;
 `;
+
+export const QuantityAreaModal = styled.div``;
 
 export const LogoutArea = styled.span`
   display: flex;
