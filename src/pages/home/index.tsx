@@ -29,11 +29,12 @@ import {
   GetProductsByUser,
 } from "../../services/productServices";
 import { UserInterface } from "../../services/types/userType";
-import { PostSales } from "../../services/salesServices";
+import { GetSales, PostSales } from "../../services/salesServices";
 import {
   AddSalesInterface,
   SalesInterface,
 } from "../../services/types/salesType";
+import moment from "moment";
 
 interface ListProps {
   value?: string;
@@ -56,6 +57,7 @@ export function Home() {
   const [userInfo, setUserInfo] = useState<UserInterface>();
   const [listProps, setListProps] = useState<Array<ListProps>>([]);
   const [quantityProduct, setQuantityProduct] = useState<number>();
+  const [sales, setSales] = useState<Array<SalesInterface>>();
 
   useEffect(() => {
     if (decoded != undefined) {
@@ -90,14 +92,38 @@ export function Home() {
           warningNotification("Erro ao resgatar usuário");
         }
       };
+
+      const getSales = async () => {
+        try {
+          const response = await GetSales(token);
+          if (response?.status == 200) {
+            setSales(response.data);
+            console.log(response.data);
+          }
+        } catch (error) {
+          warningNotification("Erro ao resgatar vendas");
+        }
+      };
       getUserInfo();
       getProducts();
+      getSales();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const itemsToShow = productInfo && productInfo.slice(0, 6);
 
+  const totalValue =
+    sales &&
+    sales.reduce(
+      (acc, curr) => {
+        acc.sum += curr.value;
+        if (curr.value > acc.max) acc.max = curr.value;
+        if (curr.value < acc.min) acc.min = curr.value;
+        return acc;
+      },
+      { sum: 0, max: -Infinity, min: Infinity }
+    );
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -244,7 +270,41 @@ export function Home() {
           </S.ProductArea>
           <S.StatusArea>
             <S.DataArea>
-              <S.AreaOne>area 1</S.AreaOne>
+              <S.AreaOne>
+                {sales && sales?.length > 0 ? (
+                  <section>
+                    <div>
+                      <S.HeavyText>Total de vendas:</S.HeavyText>
+                      <S.LightText>{sales?.length}</S.LightText>
+                    </div>
+                    <div>
+                      <S.HeavyText>Valor de vendas:</S.HeavyText>
+                      <S.LightText>R$ {totalValue?.sum},00</S.LightText>
+                    </div>
+                    <div>
+                      <S.HeavyText>Ultima vendas:</S.HeavyText>
+                      <S.LightText>
+                        {sales &&
+                          moment(sales[sales?.length - 1].createdAt).format(
+                            "DD/MM/YYYY HH:MM"
+                          )}
+                      </S.LightText>
+                    </div>
+                    <div>
+                      <S.HeavyText>Maior venda:</S.HeavyText>
+                      <S.LightText>R$ {totalValue?.max},00</S.LightText>
+                    </div>
+                    <div>
+                      <S.HeavyText>Menor venda:</S.HeavyText>
+                      <S.LightText>R$ {totalValue?.min},00</S.LightText>
+                    </div>
+                  </section>
+                ) : (
+                  <section>
+                    <S.LightText>Sem vendas no momento</S.LightText>
+                  </section>
+                )}
+              </S.AreaOne>
               <S.RegisterSellerArea>
                 <Button
                   label="Registrar vendas"

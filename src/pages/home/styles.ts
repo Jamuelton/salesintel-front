@@ -148,6 +148,14 @@ export const AreaOne = styled.div`
   padding: 1rem;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    height: 100%;
+  }
+
   @media (min-width: 426px) and (max-width: 1023px) {
     height: 100%;
     width: 100%;
@@ -155,6 +163,12 @@ export const AreaOne = styled.div`
   @media (min-width: 1024px) {
     height: 100%;
     width: 60%;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
   }
 `;
 
