@@ -178,6 +178,20 @@ export const AreaTwo = styled.div`
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    height: 100%;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+  }
 `;
 
 export const RegisterSellerArea = styled.div`

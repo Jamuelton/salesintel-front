@@ -315,7 +315,18 @@ export function Home() {
                   size="large"
                   buttonFunction={showModal}
                 />
-                <S.AreaTwo>Area 2</S.AreaTwo>
+                <S.AreaTwo>
+                  {productInfo && productInfo?.length > 0 ? (
+                    <section>
+                      <div>
+                        <S.HeavyText>Quantidade de produtos:</S.HeavyText>
+                        <S.LightText>{productInfo.length}</S.LightText>
+                      </div>
+                    </section>
+                  ) : (
+                    <section></section>
+                  )}
+                </S.AreaTwo>
               </S.RegisterSellerArea>
             </S.DataArea>
             <S.ButtonArea>
