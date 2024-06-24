@@ -165,7 +165,7 @@ export function Home() {
   };
 
   const quantityOptions: ListProps[] = Array.from(
-    { length: quantityProduct },
+    { length: quantityProduct ?? 0 },
     (_, i) => ({
       value: (i + 1).toString(),
       label: (i + 1).toString(),
