@@ -16,7 +16,10 @@ import { Popover } from "antd";
 import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
-import { warningNotification } from "../../components/Notification";
+import {
+  successNotification,
+  warningNotification,
+} from "../../components/Notification";
 import { GetUserByEmail } from "../../services/userServices";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
@@ -26,6 +29,11 @@ import {
   GetProductsByUser,
 } from "../../services/productServices";
 import { UserInterface } from "../../services/types/userType";
+import { PostSales } from "../../services/salesServices";
+import {
+  AddSalesInterface,
+  SalesInterface,
+} from "../../services/types/salesType";
 
 interface ListProps {
   value?: string;
@@ -47,6 +55,7 @@ export function Home() {
   const [product, setProduct] = useState<AddProductInterface>();
   const [userInfo, setUserInfo] = useState<UserInterface>();
   const [listProps, setListProps] = useState<Array<ListProps>>([]);
+  const [quantityProduct, setQuantityProduct] = useState<number>();
 
   useEffect(() => {
     if (decoded != undefined) {
@@ -94,7 +103,7 @@ export function Home() {
   };
 
   const handleOk = () => {
-    setIsModalOpen(false);
+    postSale();
   };
 
   const handleCancel = () => {
@@ -109,6 +118,8 @@ export function Home() {
       );
       if (response?.status == 200) {
         setProduct(response.data);
+
+        setQuantityProduct(response.data.quantity);
       }
     } catch (error) {
       warningNotification("Erro ao buscar produtos");
@@ -118,6 +129,33 @@ export function Home() {
   const heandleChangeProduct = (value: unknown) => {
     if (typeof value === "number") {
       getProductById(value.toString());
+    }
+  };
+
+  const handleChangeQuantity = (value: unknown) => {
+    if (typeof value === "number") {
+      setQuantityProduct(value);
+    }
+  };
+
+  const quantityOptions: ListProps[] = Array.from(
+    { length: quantityProduct },
+    (_, i) => ({
+      value: (i + 1).toString(),
+      label: (i + 1).toString(),
+    })
+  );
+
+  const saleData: AddSalesInterface = {
+    value: product?.salePrice,
+    quantity: quantityProduct,
+    productId: product?.id,
+  };
+
+  const postSale = async () => {
+    const response = await PostSales(saleData, token);
+    if (response?.status == 201) {
+      successNotification("Venda realizada com sucesso!");
     }
   };
 
@@ -268,6 +306,11 @@ export function Home() {
           </S.PriceAreaModal>
           <S.QuantityAreaModal>
             <S.LightText>Quantidade:</S.LightText>
+            <Select
+              defaut={quantityProduct?.toString()}
+              list={quantityOptions}
+              selectFunc={handleChangeQuantity}
+            />
           </S.QuantityAreaModal>
         </section>
       </S.RegisterSellModal>
