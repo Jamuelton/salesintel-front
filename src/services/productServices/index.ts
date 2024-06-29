@@ -57,3 +57,16 @@ export const UpdateProduct = async (
     }
   }
 };
+
+export const DeleteProduct = async (token: string, id: string) => {
+  try {
+    const response = await api.delete(`/products/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return error.response;
+    }
+  }
+};
