@@ -70,10 +70,7 @@ export function Products() {
 
   const getProducts = async () => {
     try {
-      const response = await GetProductsByUser(
-        token != undefined ? token : "",
-        email
-      );
+      const response = await GetProductsByUser(token != undefined ? token : "");
       if (response?.status == 200) {
         setData(response.data);
       }

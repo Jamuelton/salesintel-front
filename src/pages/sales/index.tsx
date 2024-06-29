@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
 import * as S from "./styles";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode";
 import { Input } from "../../components/Input";
 import {
   DotsThreeCircle,
@@ -8,9 +10,12 @@ import {
 } from "@phosphor-icons/react";
 import { Button } from "../../components/Button";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeleteModal } from "../../components/DeleteModal";
 import { SalesReportModal } from "../../components/SalesReportModal";
+import { GetUserByEmail } from "../../services/userServices";
+import { warningNotification } from "../../components/Notification";
+import { UserInterface } from "../../services/types/userType";
 
 interface TableData {
   key: string;
@@ -23,10 +28,33 @@ interface TableData {
 
 export function Sales() {
   const navigate = useNavigate();
+  const token = Cookies.get("token") || "";
+  const decoded = jwtDecode(token);
+  const email = decoded.sub || "";
+
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
   const [isSalesReportModalOpen, setIsSalesReportModalOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState<UserInterface>();
+
+  useEffect(() => {
+    if (decoded != undefined) {
+      const getUserInfo = async () => {
+        try {
+          const response = await GetUserByEmail(token, email);
+          if (response?.status == 200) {
+            setUserInfo(response.data);
+          }
+        } catch (error) {
+          warningNotification("Erro ao resgatar usuário");
+        }
+      };
+
+      getUserInfo();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChangeSearch = (e: { target: { value: string } }) => {
     const { value } = e.target;
@@ -207,8 +235,8 @@ export function Sales() {
       <S.Content>
         <div>
           <h2>
-            <a onClick={() => sendHome()}>NOME DA EMPRESA</a>
-            {" > "} <span>RELATÓRIO DE VENDAS</span>
+            <a onClick={() => sendHome()}>{userInfo?.company?.toUpperCase()}</a>
+            {" > "} <span>PRODUTOS</span>
           </h2>
           <S.Line style={{ borderTop: "1px solid #244bc5" }} />
         </div>
@@ -251,6 +279,7 @@ export function Sales() {
         <SalesReportModal
           onCancel={closeSalesReportModal}
           open={isSalesReportModalOpen}
+          data={data}
         />
       </S.Content>
     </S.Container>
