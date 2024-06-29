@@ -35,7 +35,7 @@ export const LabelArea = styled.div`
 export const IconArea = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   @media (min-width: 426px) and (max-width: 1023px) {
   }
   @media (min-width: 1024px) {

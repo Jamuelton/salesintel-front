@@ -1,4 +1,4 @@
-import { Checkbox, Divider, Modal } from "antd";
+import { Divider, Modal } from "antd";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -148,6 +148,14 @@ export const AreaOne = styled.div`
   padding: 1rem;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    height: 100%;
+  }
+
   @media (min-width: 426px) and (max-width: 1023px) {
     height: 100%;
     width: 100%;
@@ -155,6 +163,12 @@ export const AreaOne = styled.div`
   @media (min-width: 1024px) {
     height: 100%;
     width: 60%;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
   }
 `;
 
@@ -164,6 +178,20 @@ export const AreaTwo = styled.div`
   border-radius: 1rem;
   padding: 1rem;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    justify-content: center;
+    height: 100%;
+  }
+
+  div {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+  }
 `;
 
 export const RegisterSellerArea = styled.div`
@@ -268,7 +296,7 @@ export const HeavyText = styled.label`
 
 export const PriceAreaModal = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 
   gap: 1rem;
 
@@ -276,12 +304,6 @@ export const PriceAreaModal = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-  }
-`;
-
-export const BoxPrice = styled(Checkbox)`
-  span {
-    color: var(--blue-primary);
   }
 `;
 
@@ -298,6 +320,8 @@ export const InputAreaModal = styled.div`
   gap: 12px;
 `;
 
+export const QuantityAreaModal = styled.div``;
+
 export const LogoutArea = styled.span`
   display: flex;
   align-items: center;
@@ -307,5 +331,22 @@ export const LogoutArea = styled.span`
     cursor: pointer;
     color: #ff0000;
     font-weight: 700;
+  }
+`;
+
+export const ProductModal = styled(Modal)`
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    div {
+      display: flex;
+      gap: 0.5rem;
+    }
+  }
+
+  .ant-btn-default {
+    display: none;
   }
 `;

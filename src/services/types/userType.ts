@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 export interface UserInterface {
+  id?: number;
   company?: string;
   email: string;
   password: string;
