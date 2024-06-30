@@ -4,20 +4,12 @@ import { Input } from "../Input";
 import { Modal } from "../Modal";
 import * as S from "./styles";
 import * as XLSX from "xlsx";
-
-interface TableData {
-  key: string;
-  id: string;
-  name: string;
-  saleValue: string;
-  quantity: string;
-  saleDate: string;
-}
+import { SalesInterface } from "../../services/types/salesType";
 
 interface SalesReportModalInterface {
   open?: boolean;
   onCancel?: () => void;
-  data?: TableData[];
+  data?: SalesInterface[];
 }
 
 export const SalesReportModal: React.FC<SalesReportModalInterface> = ({
@@ -28,15 +20,8 @@ export const SalesReportModal: React.FC<SalesReportModalInterface> = ({
   const [initialDate, setInitialDate] = useState<string>();
   const [finalDate, setFinalDate] = useState<string>();
 
-  //Remover depois
-  function parseDate(date: string) {
-    const [day, month, year] = date.split("/");
-    return new Date(`${year}-${month}-${day}`);
-  }
-
   const submit = () => {
     handleExport();
-
     if (onCancel != undefined) {
       onCancel();
     }
@@ -45,7 +30,7 @@ export const SalesReportModal: React.FC<SalesReportModalInterface> = ({
   const handleExport = () => {
     if (data != undefined) {
       const filteredData = data.filter((item) => {
-        const saleDate = parseDate(item.saleDate);
+        const saleDate = new Date(item.createdAt);
         if (initialDate != undefined && finalDate != undefined) {
           return (
             saleDate >= new Date(initialDate) && saleDate <= new Date(finalDate)
@@ -55,10 +40,17 @@ export const SalesReportModal: React.FC<SalesReportModalInterface> = ({
         }
       });
 
+      const formattedData = filteredData.map((item) => ({
+        id: item.id,
+        name: item.product.name,
+        saleValue: item.value.toString(),
+        quantity: item.quantity.toString(),
+        saleDate: new Date(item.createdAt).toLocaleDateString("pt-BR"),
+      }));
+
       const wb = XLSX.utils.book_new();
-      const ws = XLSX.utils.json_to_sheet(filteredData);
+      const ws = XLSX.utils.json_to_sheet(formattedData);
       const colWidths = [
-        { wch: 4 },
         { wch: 3 },
         { wch: 50 },
         { wch: 15 },
@@ -73,7 +65,6 @@ export const SalesReportModal: React.FC<SalesReportModalInterface> = ({
         ws,
         [
           [
-            "Key",
             "Id",
             "Nome do Produto",
             "Valor da Venda",

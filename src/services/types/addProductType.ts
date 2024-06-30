@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export interface AddProductInterface {
   id?: number;
-  name?: string;
+  name: string;
   purchasePrice: number;
   salePrice: number;
   quantity: number;

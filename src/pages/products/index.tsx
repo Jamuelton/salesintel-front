@@ -40,6 +40,7 @@ export function Products() {
   const [data, setData] = useState<TableData[]>([]);
   const [userInfo, setUserInfo] = useState<UserInterface>();
   const [addItemsProduct, setAddItemsProduct] = useState<AddProductInterface>({
+    name: "",
     batch: 0,
     categoryId: 0,
     expiration: "",
