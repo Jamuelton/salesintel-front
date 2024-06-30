@@ -40,6 +40,7 @@ export function Products() {
   const [data, setData] = useState<TableData[]>([]);
   const [userInfo, setUserInfo] = useState<UserInterface>();
   const [addItemsProduct, setAddItemsProduct] = useState<AddProductInterface>({
+    name: "",
     batch: 0,
     categoryId: 0,
     expiration: "",
@@ -70,10 +71,7 @@ export function Products() {
 
   const getProducts = async () => {
     try {
-      const response = await GetProductsByUser(
-        token != undefined ? token : "",
-        email
-      );
+      const response = await GetProductsByUser(token != undefined ? token : "");
       if (response?.status == 200) {
         setData(response.data);
       }
