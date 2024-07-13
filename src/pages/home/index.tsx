@@ -58,6 +58,11 @@ export function Home() {
   const [listProps, setListProps] = useState<Array<ListProps>>([]);
   const [quantityProduct, setQuantityProduct] = useState<number>();
   const [sales, setSales] = useState<Array<SalesInterface>>();
+  const [reloadInfo, setReloadInfo] = useState<number>(0);
+
+  function reloadPageInfo() {
+    setReloadInfo((prev) => prev + 1);
+  }
 
   useEffect(() => {
     if (decoded != undefined) {
@@ -109,7 +114,7 @@ export function Home() {
       getSales();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [reloadInfo]);
 
   const itemsToShow = productInfo && productInfo.slice(0, 6);
 
@@ -182,6 +187,7 @@ export function Home() {
     const response = await PostSales(saleData, token);
     if (response?.status == 201) {
       successNotification("Venda realizada com sucesso!");
+      reloadPageInfo();
     }
   };
 
@@ -216,6 +222,9 @@ export function Home() {
     warningNotification("Usuário deslogado");
     sendToLogin();
   };
+
+  const lowStockProducts =
+    productInfo && productInfo.filter((product) => product.quantity < 10);
 
   return (
     <S.Container>
@@ -322,9 +331,25 @@ export function Home() {
                         <S.HeavyText>Quantidade de produtos:</S.HeavyText>
                         <S.LightText>{productInfo.length}</S.LightText>
                       </div>
+                      <div>
+                        <S.HeavyText>Último produto adicionado:</S.HeavyText>
+                        <S.LightText>
+                          {productInfo[productInfo.length - 1].name}
+                        </S.LightText>
+                      </div>
+                      {lowStockProducts && lowStockProducts?.length > 0 && (
+                        <div>
+                          <S.HeavyText $warning>Produtos acabando:</S.HeavyText>
+                          <S.LightText $warning>
+                            {lowStockProducts[0].name}
+                          </S.LightText>
+                        </div>
+                      )}
                     </section>
                   ) : (
-                    <section></section>
+                    <section>
+                      <S.LightText>Sem produtos cadatrados</S.LightText>
+                    </section>
                   )}
                 </S.AreaTwo>
               </S.RegisterSellerArea>
