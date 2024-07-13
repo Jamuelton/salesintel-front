@@ -18,6 +18,7 @@ import { GetUserByEmail } from "../../services/userServices";
 import { UserInterface } from "../../services/types/userType";
 import { warningNotification } from "../../components/Notification";
 import { AddProductInterface } from "../../services/types/addProductType";
+import { AddCategoriesModal } from "../../components/AddCategoryModal";
 
 interface TableData {
   key: string;
@@ -34,6 +35,7 @@ export function Products() {
   const navigate = useNavigate();
   const [isAddProductModalOpen, setIsAddProductModalOpen] = useState(false);
   const [isAddItemsModalOpen, setIsAddItemsModalOpen] = useState(false);
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
@@ -199,6 +201,14 @@ export function Products() {
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const AddCategoryModal = () => {
+    setIsAddCategoryModalOpen(true);
+  };
+
+  const CloseAddCategoryModal = () => {
+    setIsAddCategoryModalOpen(false);
+  };
+
   return (
     <S.Container>
       <S.Content>
@@ -221,6 +231,13 @@ export function Products() {
             </S.SearchInput>
 
             <S.AddButton>
+              <Button
+                label="ADICIONAR CATEGORIA"
+                shape="round"
+                color="#f5f6fa"
+                secondColor="#274fc7"
+                buttonFunction={() => AddCategoryModal()}
+              />
               <Button
                 label="ADICIONAR PRODUTO"
                 shape="round"
@@ -255,6 +272,11 @@ export function Products() {
         onCancel={closeDeleteModal}
         headerText={`DELETAR PRODUTO ${deleteId}`}
         id={deleteId}
+      />
+
+      <AddCategoriesModal
+        onCancel={CloseAddCategoryModal}
+        open={isAddCategoryModalOpen}
       />
     </S.Container>
   );
