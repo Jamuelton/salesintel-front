@@ -284,13 +284,15 @@ export const RegisterSellModal = styled(Modal)`
   }
 `;
 
-export const LightText = styled.label`
-  color: var(--blue-primary);
+export const LightText = styled.label<{ $warning?: boolean }>`
+  color: ${(props) =>
+    props.$warning ? "var(--red-primary)" : "var(--blue-primary)"};
   font-weight: 100;
 `;
 
-export const HeavyText = styled.label`
-  color: var(--blue-primary);
+export const HeavyText = styled.label<{ $warning?: boolean }>`
+  color: ${(props) =>
+    props.$warning ? "var(--red-primary)" : "var(--blue-primary)"};
   font-weight: 700;
 `;
 
