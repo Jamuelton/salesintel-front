@@ -31,15 +31,16 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
 }) => {
   const [name, setName] = useState<string>();
   const [expirationDate, setExpirationDate] = useState<string>();
-  const [unit, setUnit] = useState<string>();
+  const [unit, setUnit] = useState<string>("other");
   const [category, setCategory] = useState<string>();
-  const [lote, setLote] = useState<string>();
+  const [lote, setLote] = useState<number>();
   const [quantity, setQuantity] = useState<number>();
   const [purschasePrice, setPurchasePrice] = useState<number>();
   const [salePrice, setSalePrice] = useState<number>();
   const [categoryData, setCategoryData] = useState<CategoryInterface[]>();
 
   const [errorName, setErrorName] = useState<ErrorInterface>();
+  const [errorLote, setErrorLote] = useState<ErrorInterface>();
   const [errorexpirationDate, setErrorExpirationDate] =
     useState<ErrorInterface>();
   const [errorquantity, setErrorQuantity] = useState<ErrorInterface>();
@@ -72,6 +73,25 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
     { value: "arroba", label: "Arroba" },
   ];
 
+  const isFormValid = () => {
+    return (
+      name &&
+      expirationDate &&
+      unit &&
+      category &&
+      lote &&
+      quantity &&
+      purschasePrice &&
+      salePrice &&
+      !errorName?.errorShow &&
+      !errorLote?.errorShow &&
+      !errorexpirationDate?.errorShow &&
+      !errorquantity?.errorShow &&
+      !errorPurchasePrice?.errorShow &&
+      !errorSalePrice?.errorShow
+    );
+  };
+
   useEffect(() => {
     const getCategories = async () => {
       try {
@@ -100,7 +120,17 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
 
   const handleChangeLote = (e: { target: { value: string } }) => {
     const { value } = e.target;
-    setLote(value);
+    if (value != "") {
+      try {
+        AddProductSchema.shape.lote.parse(Number(value));
+        setErrorLote({ errorType: "", errorShow: false });
+      } catch (error) {
+        setErrorLote({ errorType: "error", errorShow: true });
+      }
+    } else {
+      setErrorLote({ errorType: "error", errorShow: true });
+    }
+    setLote(Number(value));
   };
 
   const handleChangeExpirationDate = (e: { target: { value: string } }) => {
@@ -148,7 +178,9 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
   };
 
   const handleChangeUnit = (value: unknown) => {
-    setUnit(String(value));
+    if (String(value) != "") {
+      setUnit(String(value));
+    }
   };
 
   const handleChangeCategory = (value: unknown) => {
@@ -156,27 +188,31 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
   };
 
   const submit = async () => {
-    try {
-      const productData: AddProductInterface = {
-        batch: Number(lote),
-        categoryId: Number(category),
-        expiration: expirationDate || "",
-        purchasePrice: Number(purschasePrice),
-        quantity: Number(quantity),
-        salePrice: Number(salePrice),
-        unit: unit || "",
-        userId: userId,
-        name: name,
-      };
-      const response = await PostProduct(productData, token);
-      if (response?.status == 201) {
-        successNotification("Produto adicionado");
-        if (onCancel != undefined) {
-          onCancel();
+    if (isFormValid()) {
+      try {
+        const productData: AddProductInterface = {
+          batch: Number(lote),
+          categoryId: Number(category),
+          expiration: expirationDate || "",
+          purchasePrice: Number(purschasePrice),
+          quantity: Number(quantity),
+          salePrice: Number(salePrice),
+          unit: unit || "",
+          userId: userId,
+          name: name || "",
+        };
+        const response = await PostProduct(productData, token);
+        if (response?.status == 201) {
+          successNotification("Produto adicionado");
+          if (onCancel != undefined) {
+            onCancel();
+          }
         }
+      } catch (error) {
+        warningNotification("Ocorreu um erro!");
       }
-    } catch (error) {
-      warningNotification("Ocorreu um erro!");
+    } else {
+      warningNotification("Preencha todos os campos");
     }
   };
 
@@ -203,7 +239,9 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
             color="#244bc5"
             inputFunction={handleChangeName}
             status={errorName?.errorType}
-            errorText={"O nome do produto precisa ter entre 2 e 60 caracteres."}
+            errorText={
+              "O nome do produto precisa ter entre 3 e 100 caracteres."
+            }
           />
         </S.InputContainer>
         <S.Row>
@@ -227,6 +265,8 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
               options={options}
               defaultActiveFirstOption
               onChange={handleChangeUnit}
+              aria-errormessage="Selecione uma unidade"
+              defaultValue={options[0].value}
             />
           </S.InputContainer>
         </S.Row>
@@ -253,6 +293,10 @@ export const AddProductModal: React.FC<AddProductModalInterface> = ({
               placeholder="LOTE"
               color="#244bc5"
               inputFunction={handleChangeLote}
+              status={errorLote?.errorType}
+              errorText={
+                "O lote precisa ter entre 1 e 10 caracteres numéricos."
+              }
             />
           </S.InputContainer>
           <S.InputContainer>
