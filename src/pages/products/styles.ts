@@ -65,7 +65,9 @@ export const SearchButtonContainer = styled.section`
 `;
 
 export const AddButton = styled.div`
-  width: 15rem;
+  width: 30rem;
+  display: flex;
+  gap: 1rem;
 `;
 export const SearchInput = styled.div`
   width: 15rem;

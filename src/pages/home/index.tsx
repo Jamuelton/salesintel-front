@@ -17,6 +17,7 @@ import { Select } from "../../components/Select";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
 import {
+  errorNotification,
   successNotification,
   warningNotification,
 } from "../../components/Notification";
@@ -184,10 +185,14 @@ export function Home() {
   };
 
   const postSale = async () => {
-    const response = await PostSales(saleData, token);
-    if (response?.status == 201) {
-      successNotification("Venda realizada com sucesso!");
-      reloadPageInfo();
+    try {
+      const response = await PostSales(saleData, token);
+      if (response?.status == 201) {
+        successNotification("Venda realizada com sucesso!");
+        reloadPageInfo();
+      }
+    } catch (error) {
+      errorNotification("Erro ao relizar venda");
     }
   };
 
