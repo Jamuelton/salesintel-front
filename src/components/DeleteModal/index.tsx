@@ -22,7 +22,6 @@ export const DeleteModal: React.FC<DeleteModalInterface> = ({
   const token = Cookies.get("token") || "";
 
   const deleteProduct = async (id: number) => {
-    console.log(id);
     try {
       const response = await DeleteProduct(
         token != undefined ? token : "",
@@ -36,6 +35,7 @@ export const DeleteModal: React.FC<DeleteModalInterface> = ({
       }
     } catch (error) {
       warningNotification("Erro ao deletar produto");
+      console.log(error);
     }
   };
 

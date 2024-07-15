@@ -1,4 +1,4 @@
-import { Divider, Modal } from "antd";
+import { Divider, Modal, Select } from "antd";
 import styled from "styled-components";
 
 export const Container = styled.div`
@@ -322,7 +322,10 @@ export const InputAreaModal = styled.div`
   gap: 12px;
 `;
 
-export const QuantityAreaModal = styled.div``;
+export const QuantityAreaModal = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const LogoutArea = styled.span`
   display: flex;
@@ -351,4 +354,8 @@ export const ProductModal = styled(Modal)`
   .ant-btn-default {
     display: none;
   }
+`;
+
+export const CustomSelect = styled(Select)`
+  width: 100px;
 `;

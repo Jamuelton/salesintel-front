@@ -4,7 +4,7 @@ import { AddProductInterface } from "../types/addProductType";
 
 export const GetProductsByUser = async (token: string) => {
   try {
-    const response = await api.get(`/products/token`, {
+    const response = await api.get(`/products`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response;
@@ -60,9 +60,13 @@ export const UpdateProduct = async (
 
 export const DeleteProduct = async (token: string, id: string) => {
   try {
-    const response = await api.delete(`/products/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    const response = await api.patch(
+      `/products/${Number(id)}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response;
   } catch (error) {
     if (error instanceof AxiosError) {

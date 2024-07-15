@@ -13,7 +13,7 @@ import { ProductList } from "../../components/productList";
 import { useEffect, useState } from "react";
 import { Popover } from "antd";
 
-import { Select } from "../../components/Select";
+import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../config/auth/UseAuth";
 import {
@@ -30,7 +30,7 @@ import {
   GetProductsByUser,
 } from "../../services/productServices";
 import { UserInterface } from "../../services/types/userType";
-import { GetSales, PostSales } from "../../services/salesServices";
+import { GetFinances, GetSales, PostSales } from "../../services/salesServices";
 import {
   AddSalesInterface,
   SalesInterface,
@@ -119,6 +119,24 @@ export function Home() {
 
   const itemsToShow = productInfo && productInfo.slice(0, 6);
 
+  const getFinances = async () => {
+    try {
+      const response = await GetFinances(token);
+      const url = window.URL.createObjectURL(new Blob([response]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `relatorio-${new Date().toISOString()}.csv`
+      ); // Nome do arquivo a ser baixado
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      warningNotification("Ocorreu um erro ao realizar o download");
+    }
+  };
+
   const totalValue =
     sales &&
     sales.reduce(
@@ -165,9 +183,9 @@ export function Home() {
   };
 
   const handleChangeQuantity = (value: unknown) => {
-    if (typeof value === "number") {
-      setQuantityProduct(value);
-    }
+    console.log(value);
+    console.log(value);
+    setQuantityProduct(Number(value));
   };
 
   const quantityOptions: ListProps[] = Array.from(
@@ -189,6 +207,7 @@ export function Home() {
       const response = await PostSales(saleData, token);
       if (response?.status == 201) {
         successNotification("Venda realizada com sucesso!");
+        handleCancel();
         reloadPageInfo();
       }
     } catch (error) {
@@ -296,7 +315,7 @@ export function Home() {
                       <S.LightText>R$ {totalValue?.sum},00</S.LightText>
                     </div>
                     <div>
-                      <S.HeavyText>Ultima vendas:</S.HeavyText>
+                      <S.HeavyText>Última venda:</S.HeavyText>
                       <S.LightText>
                         {sales &&
                           moment(sales[sales?.length - 1].createdAt).format(
@@ -374,6 +393,7 @@ export function Home() {
                 secondColor="#244bc5"
                 shape="round"
                 icon={<Receipt size={20} />}
+                buttonFunction={getFinances}
               />
             </S.ButtonArea>
           </S.StatusArea>
@@ -390,9 +410,9 @@ export function Home() {
           <S.SelectAreaModal>
             <S.LightText>Produto:</S.LightText>
             <Select
-              defaut="Selecione"
-              list={listProps}
-              selectFunc={heandleChangeProduct}
+              options={listProps}
+              onChange={heandleChangeProduct}
+              defaultValue={"Selecione"}
             />
           </S.SelectAreaModal>
           <S.PriceAreaModal>
@@ -407,10 +427,10 @@ export function Home() {
           </S.PriceAreaModal>
           <S.QuantityAreaModal>
             <S.LightText>Quantidade:</S.LightText>
-            <Select
-              defaut={quantityProduct?.toString()}
-              list={quantityOptions}
-              selectFunc={handleChangeQuantity}
+            <S.CustomSelect
+              options={quantityOptions}
+              onChange={handleChangeQuantity}
+              defaultValue={quantityProduct?.toString()}
             />
           </S.QuantityAreaModal>
         </section>
