@@ -14,6 +14,8 @@ RUN mkdir -p /var/salesInterface/html
 
 RUN mv dist/* /var/salesInterface/html
 
+VOLUME /var/salesInterface/html
+
 WORKDIR /
 
 RUN rm -rf /tmp/salesInterface
