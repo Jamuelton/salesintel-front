@@ -21,14 +21,14 @@ import { AddProductInterface } from "../../services/types/addProductType";
 import { AddCategoriesModal } from "../../components/AddCategoryModal";
 
 interface TableData {
-  key: string;
-  id: string;
-  name: string;
-  category: string;
-  categoryId: number;
-  quantity: string;
-  expiration: string;
-  unit: string;
+  key?: string;
+  id?: string;
+  name?: string;
+  category?: string;
+  categoryId?: number;
+  quantity?: string;
+  expiration?: string;
+  unit?: string;
 }
 
 export function Products() {
@@ -115,7 +115,7 @@ export function Products() {
     {
       title: "CATEGORIA",
       dataIndex: "categoryId",
-      key: "category",
+      key: "categoryId",
     },
     {
       title: "QNTD. TOTAL",
@@ -129,7 +129,7 @@ export function Products() {
     {
       title: "VENCIMENTO",
       dataIndex: "expiration",
-      key: "expirationDate",
+      key: "expiration",
       render: (expiration: string) =>
         new Date(expiration).toLocaleDateString("pt-BR"),
     },
@@ -197,8 +197,11 @@ export function Products() {
     navigate("/dashboard");
   };
 
-  const dataFiltered = data.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const dataFiltered = data.filter(
+    (item) =>
+      item &&
+      item.name &&
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const AddCategoryModal = () => {

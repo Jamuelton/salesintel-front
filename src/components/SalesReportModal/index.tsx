@@ -30,22 +30,27 @@ export const SalesReportModal: React.FC<SalesReportModalInterface> = ({
   const handleExport = () => {
     if (data != undefined) {
       const filteredData = data.filter((item) => {
-        const saleDate = new Date(item.createdAt);
-        if (initialDate != undefined && finalDate != undefined) {
-          return (
-            saleDate >= new Date(initialDate) && saleDate <= new Date(finalDate)
-          );
-        } else {
-          return data;
+        if (item && item.createdAt) {
+          const saleDate = new Date(item.createdAt);
+          if (initialDate != undefined && finalDate != undefined) {
+            return (
+              saleDate >= new Date(initialDate) &&
+              saleDate <= new Date(finalDate)
+            );
+          } else {
+            return data;
+          }
         }
       });
 
       const formattedData = filteredData.map((item) => ({
-        id: item.id,
-        name: item.product.name,
-        saleValue: item.value.toString(),
-        quantity: item.quantity.toString(),
-        saleDate: new Date(item.createdAt).toLocaleDateString("pt-BR"),
+        id: item?.id,
+        name: item?.product?.name,
+        saleValue: item?.value?.toString() ?? "",
+        quantity: item?.quantity?.toString() ?? "",
+        saleDate: item?.createdAt
+          ? new Date(item.createdAt).toLocaleDateString("pt-BR")
+          : "",
       }));
 
       const wb = XLSX.utils.book_new();

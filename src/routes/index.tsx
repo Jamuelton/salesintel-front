@@ -13,17 +13,17 @@ export const AppRoutes = () => {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route element={<PrivateRoutes redirectPath={"/login"} />}>
+          <Route element={<PrivateRoutes redirectPath={"/"} />}>
             <Route path="/dashboard" element={<Home />} />
           </Route>
-          <Route element={<PrivateRoutes redirectPath={"/login"} />}>
+          <Route element={<PrivateRoutes redirectPath={"/"} />}>
             <Route path="/products" element={<Products />} />
           </Route>
-          <Route element={<PrivateRoutes redirectPath={"/login"} />}>
+          <Route element={<PrivateRoutes redirectPath={"/"} />}>
             <Route path="/sales" element={<Sales />} />
           </Route>
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
