@@ -123,13 +123,16 @@ export function Home() {
     sales &&
     sales.reduce(
       (acc, curr) => {
-        acc.sum += curr.value;
-        if (curr.value > acc.max) acc.max = curr.value;
-        if (curr.value < acc.min) acc.min = curr.value;
+        if (curr.value !== undefined) {
+          acc.sum += curr.value;
+          if (curr.value > acc.max) acc.max = curr.value;
+          if (curr.value < acc.min) acc.min = curr.value;
+        }
         return acc;
       },
       { sum: 0, max: -Infinity, min: Infinity }
     );
+
   const showModal = () => {
     setIsModalOpen(true);
   };
